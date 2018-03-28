@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import android.widget.TextView;
 
 
 import com.bakingstory.dummy.DummyContent;
+import com.bakingstory.entities.Recepie;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -48,8 +51,19 @@ public class RecepieItemListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                try {
+                    List<Recepie> recepieList = HelperJsonDataParser.getAllRecepies(RecepieItemListActivity.this);
+                    for (Recepie recepie : recepieList) {
+                        Log.d("Result: ", recepie.toString());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Snackbar.make(view, "Failed to retrieve list", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+
+
             }
         });
 
@@ -73,7 +87,7 @@ public class RecepieItemListActivity extends AppCompatActivity {
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final ItemListActivity mParentActivity;
+        private final RecepieItemListActivity mParentActivity;
         private final List<DummyContent.DummyItem> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
