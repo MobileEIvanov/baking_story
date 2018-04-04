@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".RecepieItemListActivity"
+            android:name=".RecipeCollection.RecipeItemListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -20,13 +20,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RecepieItemDetailActivity"
+            android:name=".RecipeDetails.RecipeItemDetailActivity"
             android:label="@string/title_recepieitem_detail"
-            android:parentActivityName=".RecepieItemListActivity"
+            android:parentActivityName=".RecipeCollection.RecipeItemListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bakingstory.RecepieItemListActivity" />
+                android:value="com.bakingstory.RecipeCollection.RecipeItemListActivity" />
         </activity>
     </application>
 

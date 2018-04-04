@@ -1,15 +1,13 @@
-package com.bakingstory;
+package com.bakingstory.data;
 
 import android.content.Context;
 
-import com.bakingstory.entities.Recepie;
+import com.bakingstory.entities.Recipe;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +19,9 @@ import java.util.List;
 public class HelperJsonDataParser {
 
 
-    public static List<Recepie> getAllRecepies(Context context) throws IOException {
-        List<Recepie> recepieList ;
-        Type fooType = new TypeToken<ArrayList<Recepie>>() {}.getType();
+    public static List<Recipe> getAllRecepies(Context context) throws IOException {
+        List<Recipe> recepieList ;
+        Type fooType = new TypeToken<ArrayList<Recipe>>() {}.getType();
         recepieList = new Gson().fromJson(extractJsonRecepiesFromFile(context),fooType);
 
         return recepieList;
