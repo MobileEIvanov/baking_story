@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bakingstory.R;
-import com.bakingstory.RecipeCollection.ContractRecipes;
 import com.bakingstory.databinding.ItemBakingStepsListContentBinding;
 import com.bakingstory.entities.BakingStep;
 
@@ -18,6 +17,8 @@ import io.reactivex.annotations.NonNull;
 
 /**
  * Created by emil.ivanov on 4/4/18.
+ * https://github.com/google/ExoPlayer/blob/release-v2/demos/main/src/main/java/com/google/android/exoplayer2/demo/PlayerActivity.java
+ *
  */
 public class AdapterBakingSteps extends Adapter<AdapterBakingSteps.ViewHolder> {
 
@@ -50,7 +51,7 @@ public class AdapterBakingSteps extends Adapter<AdapterBakingSteps.ViewHolder> {
     }
 
     public interface IStepsInteraction {
-        void onBakingStepSelected(Object bakingStep);
+        void onBakingStepSelected(BakingStep bakingStep);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -60,7 +61,7 @@ public class AdapterBakingSteps extends Adapter<AdapterBakingSteps.ViewHolder> {
         View.OnClickListener mStepClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onBakingStepSelected(v.getTag());
+                mListener.onBakingStepSelected((BakingStep) v.getTag());
             }
         };
 

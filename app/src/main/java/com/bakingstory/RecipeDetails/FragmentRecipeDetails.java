@@ -3,6 +3,7 @@ package com.bakingstory.RecipeDetails;
 import android.app.Activity;
 import android.app.Fragment;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
@@ -11,13 +12,27 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeCollection.RecipeItemListActivity;
 import com.bakingstory.databinding.FragmentRecipeDetailsBinding;
 import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.Recipe;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.RenderersFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 /**
  * A fragment representing a single RecepieItem detail screen.
@@ -88,6 +103,7 @@ public class FragmentRecipeDetails extends Fragment implements AdapterBakingStep
             return;
         }
         initSteps();
+
     }
 
 
@@ -96,17 +112,67 @@ public class FragmentRecipeDetails extends Fragment implements AdapterBakingStep
         mBinding.rvRecipeSteps.setAdapter(new AdapterBakingSteps(mRecipeData.getSteps(), this));
     }
 
-    private void initVideo() {
-        // TODO: 4/4/18 Initialise the player and video
+
+    ExoPlayer mExoPlayer;
+    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+    /**
+     * Initialize ExoPlayer.
+     *
+     * @param mediaUri The URI of the sample to play.
+     */
+    private void initializePlayer(Uri mediaUri) {
+//        if (mExoPlayer == null) {
+//            // Create an instance of the ExoPlayer.
+//            TrackSelector trackSelector = new DefaultTrackSelector();
+//            LoadControl loadControl = new DefaultLoadControl();
+//            mExoPlayer = ExoPlayerFactory.newSimpleInstance(,trackSelector,loadControl);
+//            mBinding.videoPlayerView.setPlayer(mExoPlayer);
+//            // Prepare the MediaSource.
+//            String userAgent = Util.getUserAgent(getActivity(), "BakingStory");
+//            MediaSource mediaSource = new ExtractorMediaSource.Factory(new DefaultDataSourceFactory(getActivity(), userAgent)).createMediaSource(mediaUri);
+//            mExoPlayer.prepare(mediaSource);
+//            mExoPlayer.setPlayWhenReady(true);
+//        }
+        TrackSelection.Factory adaptiveTrackSelectionFactory =
+                new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
+        String userAgent = Util.getUserAgent(getActivity(), "BakingStory");
+        TrackSelector trackSelector = new DefaultTrackSelector(adaptiveTrackSelectionFactory);
+        MediaSource mediaSource = new ExtractorMediaSource.Factory(new DefaultDataSourceFactory(getActivity(), userAgent)).createMediaSource(mediaUri);
+
+        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(getActivity(),null);
+
+        mExoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
+        mExoPlayer.setPlayWhenReady(true);
+        mExoPlayer.prepare(mediaSource);
+
+        mBinding.videoPlayerView.setPlayer(mExoPlayer);
+
     }
 
-    private void refreshContent(BakingStep bakingStep){
+
+    /**
+     * Release ExoPlayer.
+     */
+    private void releasePlayer() {
+        mExoPlayer.stop();
+        mExoPlayer.release();
+        mExoPlayer = null;
+    }
+
+
+    private void refreshContent(BakingStep bakingStep) {
 
     }
 
 
     @Override
-    public void onBakingStepSelected(Object bakingStep) {
+    public void onBakingStepSelected(BakingStep bakingStep) {
+        if (mExoPlayer != null) {
+            releasePlayer();
+        }
+        if (bakingStep.getVideoURL() != null && !bakingStep.getVideoURL().isEmpty()) {
+            initializePlayer(Uri.parse(bakingStep.getVideoURL()));
+        }
     }
 }
 
