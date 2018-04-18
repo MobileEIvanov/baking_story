@@ -74,7 +74,7 @@ public class RecipeItemListActivity extends AppCompatActivity implements Contrac
     public void onRecipeSelection(Recipe recipe, View view) {
         if (mTwoPane) {
 
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fl_recipe_item_detail_container, FragmentRecipeDetails.newInstance(recipe))
                     .commit();
         } else {

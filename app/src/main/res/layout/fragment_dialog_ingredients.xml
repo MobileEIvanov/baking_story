@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:drawableStart="@drawable/ic_keyboard_arrow_up_white_24dp"
+            android:gravity="center"
+            android:minHeight="@dimen/dimen_min_height_text"
+            android:text="@string/ipsum"
+            android:textColor="#fff" />
+    </android.support.constraint.ConstraintLayout>
+</layout>
