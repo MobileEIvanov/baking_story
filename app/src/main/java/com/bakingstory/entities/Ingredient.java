@@ -14,7 +14,7 @@ import android.os.Parcelable;
  */
 
 public class Ingredient implements Parcelable, MeasurementTypes {
-
+    public static final String INGREDIENT_DATA = "ingredient_data";
 
     private long id;
     private double quantity;

@@ -65,8 +65,13 @@ public class FragmentRecipeDetails extends Fragment implements AdapterBakingStep
     View.OnClickListener mListenerIngredients = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            BottomSheetDialogFragment bottomSheetDialogFragment = new DialogIngredients();
-            bottomSheetDialogFragment.show(getFragmentManager().beginTransaction(),"Ingredients");
+            if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                // TODO: 4/19/18 Animate icon
+            } else {
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+            }
         }
     };
 
@@ -123,28 +128,29 @@ public class FragmentRecipeDetails extends Fragment implements AdapterBakingStep
             return;
         }
 
-        mBinding.tvIngredients.setOnClickListener(mListenerIngredients);
+        mBinding.layoutIngredients.tvHeaderIngredients.setOnClickListener(mListenerIngredients);
         initSteps();
-//        initBottomSheet();
+        initBottomSheet();
 
     }
 
-//    private void initBottomSheet() {
-//        mBottomSheetBehavior = BottomSheetBehavior.from(mBinding.bottomSheet);
-//        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-//            @Override
-//            public void onStateChanged(View bottomSheet, int newState) {
-//                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-//                    mBottomSheetBehavior.setPeekHeight(0);
-//                }
-//            }
-//
-//            @Override
-//            public void onSlide(View bottomSheet, float slideOffset) {
-//            }
-//        });
-//    }
+    private void initBottomSheet() {
+        mBottomSheetBehavior = BottomSheetBehavior.from(mBinding.layoutIngredients.root);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        mBottomSheetBehavior.setPeekHeight(110);
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    mBottomSheetBehavior.setPeekHeight(110);
+                }
+            }
+
+            @Override
+            public void onSlide(View bottomSheet, float slideOffset) {
+            }
+        });
+    }
 
     private void initSteps() {
 
