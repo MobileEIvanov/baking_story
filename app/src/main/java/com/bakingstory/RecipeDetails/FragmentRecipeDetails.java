@@ -6,32 +6,24 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
-import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeCollection.RecipeItemListActivity;
 import com.bakingstory.databinding.ContentRecipeDetailsBinding;
-import com.bakingstory.databinding.FragmentRecipeDetailsBinding;
 import com.bakingstory.databinding.LayoutStepDescriptionBinding;
 import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.Recipe;
-import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -43,15 +35,13 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.synnapps.carouselview.ViewListener;
 
-import java.util.zip.Inflater;
-
 /**
  * A fragment representing a single RecepieItem detail screen.
  * This fragment is either contained in a {@link RecipeItemListActivity}
  * in two-pane mode (on tablets) or a {@link RecipeItemDetailActivity}
  * on handsets.
  */
-public class FragmentRecipeDetails extends Fragment implements AdapterBakingSteps.IStepsInteraction {
+public class FragmentRecipeDetails extends Fragment {
 
     public static final String TAG = "Recipe Details";
 
@@ -60,7 +50,23 @@ public class FragmentRecipeDetails extends Fragment implements AdapterBakingStep
     ContentRecipeDetailsBinding mBinding;
     LayoutStepDescriptionBinding mStepsBinding;
     private BottomSheetBehavior mBottomSheetBehavior;
+    // TODO: 4/16/18 Seee this one https://github.com/GIGAMOLE
 
+
+
+
+    ViewListener viewListener = new ViewListener() {
+
+        @Override
+        public View setViewForPosition(int position) {
+            mStepsBinding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()), R.layout.layout_step_description, null, false);
+            //set view attributes here
+
+            populateCurrentBakingStep(mRecipeData.getSteps().get(position));
+
+            return mStepsBinding.getRoot();
+        }
+    };
 
     View.OnClickListener mListenerIngredients = new View.OnClickListener() {
         @Override
@@ -84,6 +90,12 @@ public class FragmentRecipeDetails extends Fragment implements AdapterBakingStep
         return fragmentRecipeDetails;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -111,8 +123,16 @@ public class FragmentRecipeDetails extends Fragment implements AdapterBakingStep
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         mBinding = DataBindingUtil.inflate(inflater, R.layout.content_recipe_details, container, false);
         return mBinding.getRoot();
     }
@@ -154,12 +174,30 @@ public class FragmentRecipeDetails extends Fragment implements AdapterBakingStep
 
     private void initSteps() {
 
-        mBinding.cvStepsContent.setPageCount(mRecipeData.getSteps().size());
+
         // set ViewListener for custom view
         mBinding.cvStepsContent.setViewListener(viewListener);
+        mBinding.cvStepsContent.setPageCount(mRecipeData.getSteps().size());
         mBinding.cvStepsContent.setSlideInterval(36000000);
     }
 
+    public void populateCurrentBakingStep(BakingStep bakingStep) {
+        if (mExoPlayer != null) {
+            releasePlayer();
+        }
+
+        if (bakingStep.getVideoURL() != null && !bakingStep.getVideoURL().isEmpty()) {
+            initializePlayer(Uri.parse(bakingStep.getVideoURL()));
+        }
+
+        if (bakingStep.getDescription() != null && !bakingStep.getDescription().isEmpty()) {
+            mStepsBinding.tvStepDescription.setText(bakingStep.getDescription());
+        }
+
+        if (mRecipeData.getServings() != 0) {
+            mBinding.tvServings.setText("People to make happy: " + mRecipeData.getServings());
+        }
+    }
 
     ExoPlayer mExoPlayer;
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
@@ -199,19 +237,7 @@ public class FragmentRecipeDetails extends Fragment implements AdapterBakingStep
         }
     }
 
-    // TODO: 4/16/18 Seee this one https://github.com/GIGAMOLE
-    ViewListener viewListener = new ViewListener() {
 
-        @Override
-        public View setViewForPosition(int position) {
-            mStepsBinding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()), R.layout.layout_step_description, null, false);
-            //set view attributes here
-
-            onBakingStepSelected(mRecipeData.getSteps().get(position));
-
-            return mStepsBinding.getRoot();
-        }
-    };
 
     /**
      * Release ExoPlayer.
@@ -222,30 +248,6 @@ public class FragmentRecipeDetails extends Fragment implements AdapterBakingStep
         mExoPlayer = null;
     }
 
-
-    private void refreshContent(BakingStep bakingStep) {
-
-    }
-
-
-    @Override
-    public void onBakingStepSelected(BakingStep bakingStep) {
-        if (mExoPlayer != null) {
-            releasePlayer();
-        }
-
-        if (bakingStep.getVideoURL() != null && !bakingStep.getVideoURL().isEmpty()) {
-            initializePlayer(Uri.parse(bakingStep.getVideoURL()));
-        }
-
-        if (bakingStep.getDescription() != null && !bakingStep.getDescription().isEmpty()) {
-            mStepsBinding.tvStepDescription.setText(bakingStep.getDescription());
-        }
-
-        if (mRecipeData.getServings() != 0) {
-            mBinding.tvServings.setText("People to make happy: " + mRecipeData.getServings());
-        }
-    }
 }
 
 
