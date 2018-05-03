@@ -1,7 +1,6 @@
-package com.bakingstory.RecipeDetails;
+package com.bakingstory.RecipeDetails.Ingredients;
 
 import android.app.Dialog;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,6 +26,8 @@ import static com.bakingstory.entities.Ingredient.INGREDIENT_DATA;
 public class DialogIngredients extends BottomSheetDialogFragment {
 
     List<Ingredient> mIngredientsList;
+
+
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
 
         @Override
@@ -92,7 +93,7 @@ public class DialogIngredients extends BottomSheetDialogFragment {
                 mIngredientsList = getArguments().getParcelableArrayList(INGREDIENT_DATA);
             }
         } else if (savedInstanceState != null) {
-            mIngredientsList = savedInstanceState.getParcelableArrayList(INGREDIENT_DATA);
+             mIngredientsList = savedInstanceState.getParcelableArrayList(INGREDIENT_DATA);
 
         }
     }

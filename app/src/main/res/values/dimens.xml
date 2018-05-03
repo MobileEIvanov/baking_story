@@ -9,4 +9,10 @@
     <dimen name="dimen_row_height_baking_steps">56dp</dimen>
     <dimen name="dimen_min_height_text">48dp</dimen>
     <dimen name="padding_16dp">16dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
 </resources>

@@ -38,7 +38,7 @@ public class PresenterRecipes implements Presenter {
             }
         } catch (IOException e) {
             e.printStackTrace();
-
+            mView.showErrorView();
         }
 
     }

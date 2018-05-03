@@ -9,6 +9,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +18,11 @@ import android.view.Window;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeCollection.RecipeItemListActivity;
+import com.bakingstory.RecipeDetails.Ingredients.AdapterIngredients;
 import com.bakingstory.databinding.ContentRecipeDetailsBinding;
 import com.bakingstory.databinding.LayoutStepDescriptionBinding;
 import com.bakingstory.entities.BakingStep;
+import com.bakingstory.entities.Ingredient;
 import com.bakingstory.entities.Recipe;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -34,6 +37,8 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.synnapps.carouselview.ViewListener;
+
+import java.util.List;
 
 /**
  * A fragment representing a single RecepieItem detail screen.
@@ -51,8 +56,6 @@ public class FragmentRecipeDetails extends Fragment {
     LayoutStepDescriptionBinding mStepsBinding;
     private BottomSheetBehavior mBottomSheetBehavior;
     // TODO: 4/16/18 Seee this one https://github.com/GIGAMOLE
-
-
 
 
     ViewListener viewListener = new ViewListener() {
@@ -128,7 +131,6 @@ public class FragmentRecipeDetails extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -147,14 +149,25 @@ public class FragmentRecipeDetails extends Fragment {
         if (mRecipeData == null) {
             return;
         }
-
-        mBinding.layoutIngredients.tvHeaderIngredients.setOnClickListener(mListenerIngredients);
         initSteps();
-        initBottomSheet();
+
+        if (mRecipeData.getIngredients() != null && mRecipeData.getIngredients().size() > 0) {
+            mBinding.layoutIngredients.root.setVisibility(View.VISIBLE);
+            mBinding.layoutIngredients.tvHeaderIngredients.setOnClickListener(mListenerIngredients);
+            initBottomSheet();
+        } else {
+            mBinding.layoutIngredients.root.setVisibility(View.INVISIBLE);
+        }
 
     }
 
     private void initBottomSheet() {
+        if (mRecipeData.getIngredients() == null) {
+            return;
+        }
+
+
+        mBinding.layoutIngredients.rvIngredientsList.setAdapter(new AdapterIngredients(mRecipeData.getIngredients()));
         mBottomSheetBehavior = BottomSheetBehavior.from(mBinding.layoutIngredients.root);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         mBottomSheetBehavior.setPeekHeight(110);
@@ -236,7 +249,6 @@ public class FragmentRecipeDetails extends Fragment {
             mStepsBinding.videoPlayerView.setPlayer(mExoPlayer);
         }
     }
-
 
 
     /**

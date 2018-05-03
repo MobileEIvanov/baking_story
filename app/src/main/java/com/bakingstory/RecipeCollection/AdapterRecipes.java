@@ -22,7 +22,7 @@ public class AdapterRecipes extends RecyclerView.Adapter<AdapterRecipes.ViewHold
     private final List<Recipe> mValues;
     IRecipeInteraction mListenerItemInteraction;
 
-    AdapterRecipes(IRecipeInteraction listenerItemInteraction, List<Recipe> items) {
+    public AdapterRecipes(IRecipeInteraction listenerItemInteraction, List<Recipe> items) {
         mValues = items;
         mListenerItemInteraction = listenerItemInteraction;
     }

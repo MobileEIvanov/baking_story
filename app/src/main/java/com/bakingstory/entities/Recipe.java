@@ -3,6 +3,7 @@ package com.bakingstory.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ public class Recipe implements Parcelable {
     private List<BakingStep> steps;
     private double servings;
     private String image;
+
 
     protected Recipe(Parcel in) {
         id = in.readLong();
@@ -95,6 +97,7 @@ public class Recipe implements Parcelable {
     public void setImage(String image) {
         this.image = image;
     }
+
 
     @Override
     public int describeContents() {
