@@ -111,12 +111,10 @@ public class HomeWidgetConfigureActivity extends Activity implements AdapterReci
             finish();
             return;
         }
-
-
     }
 
     @Override
-    public void onRecipeSelection(Recipe recipe, View view) {
+    public void onRecipeSelection(Recipe recipe) {
         final Context context = HomeWidgetConfigureActivity.this;
 
         StringBuilder stringBuilder = new StringBuilder();

@@ -7,6 +7,9 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_ingredients_view_margin"
+        android:layout_marginStart="@dimen/dimen_ingredients_view_margin"
+        android:elevation="@dimen/elevation_ingredients_view"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
         <TextView
@@ -15,23 +18,37 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@color/color_ingredient_header"
-            android:drawablePadding="@dimen/padding_16dp"
-            android:drawableStart="@drawable/ic_keyboard_arrow_up_white_24dp"
+            android:elevation="8dp"
             android:gravity="center"
-            android:minHeight="@dimen/dimen_min_height_text"
+            android:minHeight="@dimen/dimen_min_height_ingredient_title"
             android:text="@string/label_ingredients"
-            android:textColor="#fff"
+            android:textColor="@color/font_color_white"
+            android:textSize="@dimen/header_ingredients_font_size"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_toggle_ingredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/color_ingredient_header"
+            android:contentDescription="@string/expand_ingredients"
+            android:elevation="8dp"
+            android:src="@drawable/ic_expand_24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_header_ingredients"
+            app:layout_constraintEnd_toEndOf="@+id/tv_header_ingredients"
+            app:layout_constraintTop_toTopOf="@+id/tv_header_ingredients" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_ingredients_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

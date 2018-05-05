@@ -1,6 +1,7 @@
 package com.bakingstory.RecipeCollection;
 
 import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +35,20 @@ public class AdapterRecipes extends RecyclerView.Adapter<AdapterRecipes.ViewHold
         return new ViewHolder(view);
     }
 
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
+        if (payloads != null && payloads.size() > 0) {
+            holder.bindData((Recipe) payloads.get(0), position);
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.itemView.setTag(mValues.get(position));
-        holder.bindData(mValues.get(position));
+        holder.itemView.setTag(position);
+        holder.bindData(mValues.get(position), position);
 
     }
 
@@ -47,6 +58,8 @@ public class AdapterRecipes extends RecyclerView.Adapter<AdapterRecipes.ViewHold
         return mValues.size();
     }
 
+    private int mPreviousSelection = -1;
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         ItemRecipeListContentBinding mBinding;
@@ -54,7 +67,16 @@ public class AdapterRecipes extends RecyclerView.Adapter<AdapterRecipes.ViewHold
         private final View.OnClickListener mListenerItemSelected = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListenerItemInteraction.onRecipeSelection((Recipe) view.getTag(), view);
+                if (mPreviousSelection != -1) {
+                    mValues.get(mPreviousSelection).setSelected(false);
+                    notifyItemChanged(mPreviousSelection, mValues.get(mPreviousSelection));
+                }
+
+                int position = (Integer) view.getTag();
+                mPreviousSelection = position;
+                mValues.get(position).setSelected(true);
+                notifyItemChanged(position, mValues.get(position));
+                mListenerItemInteraction.onRecipeSelection(mValues.get(position));
             }
         };
 
@@ -65,15 +87,21 @@ public class AdapterRecipes extends RecyclerView.Adapter<AdapterRecipes.ViewHold
             itemView.setOnClickListener(mListenerItemSelected);
         }
 
-        void bindData(Recipe recepie) {
-            if (recepie.getName() != null) {
-                mBinding.idRecepieName.setText(recepie.getName());
+        void bindData(Recipe recipe, int position) {
+            if (recipe.isSelected()) {
+                mPreviousSelection = position;
+            }
+
+            itemView.setSelected(recipe.isSelected());
+            mBinding.tvRecipeName.setSelected(recipe.isSelected());
+            if (recipe.getName() != null) {
+                mBinding.tvRecipeName.setText(recipe.getName());
             }
 
         }
     }
 
     public interface IRecipeInteraction {
-        void onRecipeSelection(Recipe recipe, View view);
+        void onRecipeSelection(Recipe recipe);
     }
 }

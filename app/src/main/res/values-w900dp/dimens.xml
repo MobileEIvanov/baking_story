@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dimen_ingredients_view_margin">56dp</dimen>
+    <dimen name="carousel_view_margin_bottom">56dp</dimen>
+    <dimen name="recipe_title_font_size">36sp</dimen>
+    <dimen name="content_padding_recipe_details">56dp</dimen>
+    <dimen name="dimen_min_height_ingredient_title">64dp</dimen>
+    <dimen name="recipe_sub_title_font_size">30sp</dimen>
+    <dimen name="title_padding_top">36dp</dimen>
+    <dimen name="header_ingredients_font_size">22sp</dimen>
+    <dimen name="carousel_view_margin_top">56dp</dimen>
+    <dimen name="dimen_toolbar_height">72dp</dimen>
+    <dimen name="steps_description_font_size">18sp</dimen>
+    <dimen name="dimen_line_spacing_steps_description">2dp</dimen>
+</resources>

@@ -75,10 +75,12 @@ public class FragmentRecipeDetails extends Fragment {
         @Override
         public void onClick(View v) {
             if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                mBinding.layoutIngredients.btnToggleIngredients.animate().setDuration(200).rotation(180);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 // TODO: 4/19/18 Animate icon
             } else {
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                mBinding.layoutIngredients.btnToggleIngredients.animate().setDuration(200).rotation(0);
 
             }
         }
@@ -116,12 +118,6 @@ public class FragmentRecipeDetails extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             mRecipeData = getArguments().getParcelable(Recipe.RECIPE_DATA);
-
-            Activity activity = this.getActivity();
-            Toolbar appBarLayout = (Toolbar) activity.findViewById(R.id.detail_toolbar);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mRecipeData.getName());
-            }
         }
     }
 
@@ -155,6 +151,7 @@ public class FragmentRecipeDetails extends Fragment {
         if (mRecipeData.getIngredients() != null && mRecipeData.getIngredients().size() > 0) {
             mBinding.layoutIngredients.root.setVisibility(View.VISIBLE);
             mBinding.layoutIngredients.tvHeaderIngredients.setOnClickListener(mListenerIngredients);
+            mBinding.layoutIngredients.btnToggleIngredients.setOnClickListener(mListenerIngredients);
             initBottomSheet();
         } else {
             mBinding.layoutIngredients.root.setVisibility(View.INVISIBLE);
@@ -175,12 +172,16 @@ public class FragmentRecipeDetails extends Fragment {
             @Override
             public void onStateChanged(View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    mBinding.layoutIngredients.btnToggleIngredients.animate().rotation(0);
                     mBottomSheetBehavior.setPeekHeight(mBinding.layoutIngredients.tvHeaderIngredients.getMinimumHeight());
                 }
             }
 
             @Override
             public void onSlide(View bottomSheet, float slideOffset) {
+                if (slideOffset > 0) {
+                    mBinding.layoutIngredients.btnToggleIngredients.animate().setDuration(200).rotation(180);
+                }
             }
         });
     }
@@ -208,7 +209,7 @@ public class FragmentRecipeDetails extends Fragment {
         }
 
         if (mRecipeData.getServings() != 0) {
-            mBinding.tvServings.setText("People to make happy: " + mRecipeData.getServings());
+            mBinding.tvServings.setText(String.format(getString(R.string.text_servings), mRecipeData.getServings()));
         }
     }
 

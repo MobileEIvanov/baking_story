@@ -5,7 +5,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:baselineAligned="false"
         android:divider="?android:attr/dividerHorizontal"
@@ -23,11 +22,17 @@
             android:name="com.bakingstory.RecepieItemListFragment"
             android:layout_width="@dimen/item_width"
             android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             app:layoutManager="LinearLayoutManager"
             tools:context="com.bakingstory.RecipeCollection.RecipeItemListActivity"
             tools:listitem="@layout/item_recipe_list_content" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:elevation="4dp"
+            android:background="@color/colorPrimary">
+
+        </View>
 
         <FrameLayout
             android:id="@+id/fl_recipe_item_detail_container"

@@ -3,7 +3,6 @@ package com.bakingstory.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,8 +24,9 @@ public class Recipe implements Parcelable {
     private String name;
     private List<Ingredient> ingredients;
     private List<BakingStep> steps;
-    private double servings;
+    private int servings;
     private String image;
+    private boolean isSelected;
 
 
     protected Recipe(Parcel in) {
@@ -34,7 +34,7 @@ public class Recipe implements Parcelable {
         name = in.readString();
         ingredients = in.createTypedArrayList(Ingredient.CREATOR);
         steps = in.createTypedArrayList(BakingStep.CREATOR);
-        servings = in.readDouble();
+        servings = in.readInt();
         image = in.readString();
     }
 
@@ -82,11 +82,11 @@ public class Recipe implements Parcelable {
         this.steps = steps;
     }
 
-    public double getServings() {
+    public int getServings() {
         return servings;
     }
 
-    public void setServings(double servings) {
+    public void setServings(int servings) {
         this.servings = servings;
     }
 
@@ -110,7 +110,15 @@ public class Recipe implements Parcelable {
         dest.writeString(name);
         dest.writeTypedList(ingredients);
         dest.writeTypedList(steps);
-        dest.writeDouble(servings);
+        dest.writeInt(servings);
         dest.writeString(image);
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

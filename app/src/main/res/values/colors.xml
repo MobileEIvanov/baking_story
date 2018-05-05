@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#00303b</color>
     <color name="colorAccent">#FF4081</color>
     <color name="color_ingredient_header">#09C</color>
+    <color name="color_title_header">#000</color>
+    <color name="color_title_sub_header">#67727c</color>
+    <color name="font_color_white">#fff</color>
+    <color name="steps_description_font_color">#616366</color>
+    <color name="state_default">#fff</color>
+    <color name="font_color_black">#000</color>
 </resources>

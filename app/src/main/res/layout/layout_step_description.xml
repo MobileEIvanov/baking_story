@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,13 +16,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView xmlns:tools="http://schemas.android.com/tools"
+        <TextView
             android:id="@+id/tv_step_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lineSpacingExtra="@dimen/dimen_line_spacing_steps_description"
             android:minHeight="@dimen/dimen_min_height_text"
             android:padding="@dimen/padding_16dp"
-            android:textColor="#000"
+            android:textColor="@color/steps_description_font_color"
+            android:textSize="@dimen/steps_description_font_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/video_player_view"

@@ -7,8 +7,8 @@
     <dimen name="dimen_steps_height">56dp</dimen>
     <dimen name="dimen_video_player">200dp</dimen>
     <dimen name="dimen_row_height_baking_steps">56dp</dimen>
-    <dimen name="dimen_min_height_text">48dp</dimen>
-    <dimen name="dimen_min_height_ingredient_title">110dp</dimen>
+    <dimen name="dimen_min_height_text">56dp</dimen>
+    <dimen name="dimen_min_height_ingredient_title">56dp</dimen>
     <dimen name="padding_16dp">16dp</dimen>
 
     <!--
@@ -18,4 +18,16 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="dimen_measurement_padding">8dp</dimen>
     <dimen name="widget_row_height">72dp</dimen>
+    <dimen name="dimen_ingredients_view_margin">0dp</dimen>
+    <dimen name="carousel_view_margin_bottom">56dp</dimen>
+    <dimen name="recipe_title_font_size">24sp</dimen>
+    <dimen name="content_padding_recipe_details">16dp</dimen>
+    <dimen name="recipe_sub_title_font_size">20sp</dimen>
+    <dimen name="title_padding_top">16dp</dimen>
+    <dimen name="header_ingredients_font_size">18sp</dimen>
+    <dimen name="elevation_ingredients_view">16dp</dimen>
+    <dimen name="carousel_view_margin_top">16dp</dimen>
+    <dimen name="dimen_toolbar_height">56dp</dimen>
+    <dimen name="steps_description_font_size">16sp</dimen>
+    <dimen name="dimen_line_spacing_steps_description">2dp</dimen>
 </resources>

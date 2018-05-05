@@ -61,12 +61,16 @@ public class RecipeItemListActivity extends AppCompatActivity implements Contrac
     }
 
     private void setupRecyclerView(List<Recipe> recipeList) {
+        if (mTwoPane) {
+            recipeList.get(0).setSelected(true);
+            onRecipeSelection(recipeList.get(0));
+        }
         mBinding.layoutRecipeCollection.rvRecipeItemList.setAdapter(new AdapterRecipes(this, recipeList));
     }
 
 
     @Override
-    public void onRecipeSelection(Recipe recipe, View view) {
+    public void onRecipeSelection(Recipe recipe) {
         if (mTwoPane) {
 
             getSupportFragmentManager().beginTransaction()

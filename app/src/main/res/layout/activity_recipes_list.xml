@@ -18,8 +18,9 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                android:layout_height="@dimen/dimen_toolbar_height"
+                android:background="@color/colorPrimary"
+                app:titleTextColor="@color/font_color_white" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -28,7 +29,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <include layout="@layout/layout_recipe_collection" android:id="@+id/layout_recipe_collection"></include>
+
+            <include
+                android:id="@+id/layout_recipe_collection"
+                layout="@layout/layout_recipe_collection"/>
         </FrameLayout>
 
 
