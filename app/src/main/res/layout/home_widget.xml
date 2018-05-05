@@ -1,12 +1,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
     android:padding="@dimen/widget_margin">
 
-   <ListView
-       android:id="@+id/lv_widget_ingredients"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"/>
+    <TextView
+        android:id="@+id/tv_header_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_ingredient_header"
+        android:gravity="center"
+        android:minHeight="@dimen/dimen_min_height_text"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        tools:text="Ingredients Brownees" />
+
+    <ListView
+        android:id="@+id/lv_widget_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_header_ingredients" />
 
 </RelativeLayout>

@@ -167,16 +167,15 @@ public class FragmentRecipeDetails extends Fragment {
             return;
         }
 
-
         mBinding.layoutIngredients.rvIngredientsList.setAdapter(new AdapterIngredients(mRecipeData.getIngredients()));
         mBottomSheetBehavior = BottomSheetBehavior.from(mBinding.layoutIngredients.root);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        mBottomSheetBehavior.setPeekHeight(110);
+        mBottomSheetBehavior.setPeekHeight(mBinding.layoutIngredients.tvHeaderIngredients.getMinimumHeight());
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    mBottomSheetBehavior.setPeekHeight(110);
+                    mBottomSheetBehavior.setPeekHeight(mBinding.layoutIngredients.tvHeaderIngredients.getMinimumHeight());
                 }
             }
 

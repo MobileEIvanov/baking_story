@@ -4,12 +4,13 @@ import android.content.Intent;
 import android.widget.RemoteViewsService;
 
 /**
- * Created by emil.ivanov on 4/30/18.
+ * Remote view service responsible for the visualisation of the
+ * Ingredient items on the home screen. using {@link BakingIngredientsRemoteFactory}
  */
 public class IngredientService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
 
-        return new HomeWidget.BakingIngredientsRemoteFactory(this.getApplicationContext());
+        return new BakingIngredientsRemoteFactory(this.getApplicationContext());
     }
 }

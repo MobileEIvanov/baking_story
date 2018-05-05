@@ -66,7 +66,7 @@ public class AdapterIngredients extends RecyclerView.Adapter<AdapterIngredients.
                 mBinding.tvMeasurement.setText(ingredient.getMeasurementAsPlainText());
             }
             if (ingredient.getQuantity() > 0) {
-                mBinding.tvMeasurement.setText("" + ingredient.getQuantity());
+                mBinding.tvQuantity.setText(ingredient.getFormattedQuantity());
             }
         }
     }

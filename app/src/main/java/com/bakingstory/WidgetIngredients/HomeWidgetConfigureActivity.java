@@ -26,10 +26,10 @@ public class HomeWidgetConfigureActivity extends Activity implements AdapterReci
 
     private static final String PREFS_NAME = "com.bakingstory.WidgetIngredients.HomeWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
+    private static final String PREF_LAST_WIDGET_KEY = "lass_widget_id";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     AdapterRecipes mAdapter;
     RecyclerView mListRecipes;
-
 
 
     public HomeWidgetConfigureActivity() {
@@ -41,6 +41,21 @@ public class HomeWidgetConfigureActivity extends Activity implements AdapterReci
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
         prefs.apply();
+    }
+
+    // Write the prefix to the SharedPreferences object for this widget
+    static void saveLastWidgetIdPref(Context context, int appWidgetId) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putInt(PREF_LAST_WIDGET_KEY, appWidgetId);
+        prefs.apply();
+    }
+
+    // Read the prefix from the SharedPreferences object for this widget.
+    // If there is no preference saved, get the default from a resource
+    static int loadLastWidgetIdPref(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        int widget = prefs.getInt(PREF_LAST_WIDGET_KEY, -1);
+        return widget;
     }
 
     // Read the prefix from the SharedPreferences object for this widget.
@@ -111,7 +126,8 @@ public class HomeWidgetConfigureActivity extends Activity implements AdapterReci
         }
 
         // When the button is clicked, store the string locally
-        saveTitlePref(context, mAppWidgetId, stringBuilder.toString());
+        saveTitlePref(context, mAppWidgetId, recipe.getName());
+        saveLastWidgetIdPref(context, mAppWidgetId);
 
         // It is the responsibility of the configuration activity to update the app widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);

@@ -3,8 +3,6 @@ package com.bakingstory.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
 /**
  * Created by emil.ivanov on 3/28/18.
  * <p>
@@ -52,7 +50,13 @@ public class Ingredient implements Parcelable, MeasurementTypes {
     }
 
     public double getQuantity() {
+
         return quantity;
+    }
+
+    public String getFormattedQuantity() {
+
+        return new java.text.DecimalFormat("#").format(quantity);
     }
 
     public void setQuantity(double quantity) {
@@ -91,11 +95,20 @@ public class Ingredient implements Parcelable, MeasurementTypes {
             case MeasurementTypes.UNIT:
                 measurePlainText = "unit";
                 break;
-            case MeasurementTypes.TBSPN:
+            case MeasurementTypes.TBLSP:
                 measurePlainText = "table spoon";
                 break;
             case MeasurementTypes.TSP:
                 measurePlainText = "tea spoon";
+                break;
+            case MeasurementTypes.KILO:
+                measurePlainText = "kilo";
+                break;
+            case MeasurementTypes.OZ:
+                measurePlainText = "ounce";
+                break;
+            case MeasurementTypes.CUP:
+                measurePlainText = "cup";
                 break;
             default:
                 measurePlainText = "N/A";
