@@ -20,6 +20,9 @@ allprojects {
         google()
         jcenter()
     }
+    configurations.all {
+    resolutionStrategy.force 'com.android.support:support-annotations:27.1.1'
+}
 }
 
 task clean(type: Delete) {

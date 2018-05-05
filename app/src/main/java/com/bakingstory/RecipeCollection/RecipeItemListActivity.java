@@ -2,6 +2,9 @@ package com.bakingstory.RecipeCollection;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -11,6 +14,7 @@ import com.bakingstory.R;
 import com.bakingstory.RecipeDetails.RecipeItemDetailActivity;
 import com.bakingstory.databinding.ActivityRecipesListBinding;
 import com.bakingstory.entities.Recipe;
+import com.bakingstory.utils.HelperIdlingResource;
 
 import java.util.List;
 
@@ -31,14 +35,8 @@ public class RecipeItemListActivity extends AppCompatActivity implements Contrac
     private boolean mTwoPane;
 
     ActivityRecipesListBinding mBinding;
+    private HelperIdlingResource mIdlingResource;
 
-    View.OnClickListener mListenerAddRecipe = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +45,6 @@ public class RecipeItemListActivity extends AppCompatActivity implements Contrac
 
         setSupportActionBar(mBinding.toolbar);
         mBinding.toolbar.setTitle(getTitle());
-
-
-        mBinding.fab.setOnClickListener(mListenerAddRecipe);
 
         if (findViewById(R.id.fl_recipe_item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -61,12 +56,12 @@ public class RecipeItemListActivity extends AppCompatActivity implements Contrac
 
 
         PresenterRecipes presenterRecipes = new PresenterRecipes(this, this);
-        presenterRecipes.requestRecipes();
+        presenterRecipes.requestRecipes(mIdlingResource);
 
     }
 
     private void setupRecyclerView(List<Recipe> recipeList) {
-        mBinding.layoutRecipeList.rvRecipeItemList.setAdapter(new AdapterRecipes(this, recipeList));
+        mBinding.layoutRecipeCollection.rvRecipeItemList.setAdapter(new AdapterRecipes(this, recipeList));
     }
 
 
@@ -91,5 +86,18 @@ public class RecipeItemListActivity extends AppCompatActivity implements Contrac
     public void showErrorView() {
         Snackbar.make(mBinding.getRoot(), "Failed to retrieve list", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+    }
+
+
+    /**
+     * Only called from test, creates and returns a new {@link HelperIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new HelperIdlingResource();
+        }
+        return mIdlingResource;
     }
 }

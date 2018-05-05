@@ -151,6 +151,7 @@ public class FragmentRecipeDetails extends Fragment {
         }
         initSteps();
 
+        mBinding.tvRecipeTitle.setText(mRecipeData.getName());
         if (mRecipeData.getIngredients() != null && mRecipeData.getIngredients().size() > 0) {
             mBinding.layoutIngredients.root.setVisibility(View.VISIBLE);
             mBinding.layoutIngredients.tvHeaderIngredients.setOnClickListener(mListenerIngredients);

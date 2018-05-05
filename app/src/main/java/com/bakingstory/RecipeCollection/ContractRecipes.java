@@ -1,6 +1,7 @@
 package com.bakingstory.RecipeCollection;
 
 import com.bakingstory.entities.Recipe;
+import com.bakingstory.utils.HelperIdlingResource;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface ContractRecipes {
 
 
     interface Presenter {
-        void requestRecipes();
+        void requestRecipes(HelperIdlingResource idlingResource);
     }
 
     interface View {

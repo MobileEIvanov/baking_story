@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.bakingstory.data.HelperJsonDataParser;
 import com.bakingstory.entities.Recipe;
+import com.bakingstory.utils.HelperIdlingResource;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,20 +26,33 @@ public class PresenterRecipes implements Presenter {
     }
 
     @Override
-    public void requestRecipes() {
+    public void requestRecipes(HelperIdlingResource idlingResource) {
 
         try {
+            // The IdlingResource is null in production.
+            if (idlingResource != null) {
+                idlingResource.setIdleState(false);
+            }
+
             List<Recipe> recipeList = HelperJsonDataParser.getAllRecepies(mContext);
 
-            if(recipeList!=null){
+            if (recipeList != null) {
                 mView.showRecipesList(recipeList);
-            }
-            else {
+                if (idlingResource != null) {
+                    idlingResource.setIdleState(true);
+                }
+            } else {
                 mView.showErrorView();
+                if (idlingResource != null) {
+                    idlingResource.setIdleState(true);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
             mView.showErrorView();
+            if (idlingResource != null) {
+                idlingResource.setIdleState(true);
+            }
         }
 
     }

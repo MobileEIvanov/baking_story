@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.design.widget.CoordinatorLayout
@@ -11,13 +12,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/tv_recipe_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Recipe title" />
+
             <TextView
                 android:id="@+id/tv_servings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:minHeight="@dimen/dimen_min_height_text"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:gravity="center"
+                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_recipe_title"
+                tools:text="Servings 10" />
 
             <com.synnapps.carouselview.CarouselView
                 android:id="@+id/cv_steps_content"
