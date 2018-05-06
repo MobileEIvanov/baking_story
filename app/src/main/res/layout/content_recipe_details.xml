@@ -56,23 +56,33 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_header_image"
                 tools:text="Servings 10" />
 
-            <com.synnapps.carouselview.CarouselView
-                android:id="@+id/cv_steps_content"
+            <com.rd.PageIndicatorView
+                android:id="@+id/pageIndicatorView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:layout_constraintBottom_toTopOf="@+id/vp_baking_steps"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:piv_animationType="worm"
+                app:piv_dynamicCount="true"
+                app:piv_interactiveAnimation="true"
+                app:piv_padding="8dp"
+                app:piv_radius="4dp"
+                app:piv_selectedColor="@color/colorPrimary"
+                app:piv_unselectedColor="@color/font_color_gray"
+                app:piv_viewPager="@id/vp_baking_steps" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_baking_steps"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginBottom="@dimen/dimen_min_height_ingredient_title"
-                android:layout_marginTop="@dimen/carousel_view_margin_top"
-                app:fillColor="@color/colorAccent"
-                app:indicatorGravity="top|center_horizontal"
-                app:indicatorMarginVertical="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_servings"
-                app:pageColor="#00000000"
-                app:radius="5dp"
-                app:strokeColor="@color/colorPrimary"
-                app:strokeWidth="2dp" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_servings" />
+
 
         </android.support.constraint.ConstraintLayout>
 

@@ -1,5 +1,6 @@
 package com.bakingstory.entities;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -15,6 +16,7 @@ import android.os.Parcelable;
 
 public class BakingStep implements Parcelable {
 
+    public static final String BAKING_DATA = "baking_data";
     private long id;
     private String shortDescription;
     private String description;
