@@ -8,6 +8,7 @@
         android:name="com.bakingstory.RecepieItemListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layoutAnimation="@anim/layout_anim_fall_down"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.bakingstory.RecipeCollection.RecipeItemListActivity"
         tools:listitem="@layout/item_recipe_list_content" />

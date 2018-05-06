@@ -7,7 +7,6 @@ import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.Snackbar;
-import android.view.View;
 
 import com.bakingstory.RecipeDetails.FragmentRecipeDetails;
 import com.bakingstory.R;
@@ -65,7 +64,7 @@ public class RecipeItemListActivity extends AppCompatActivity implements Contrac
             recipeList.get(0).setSelected(true);
             onRecipeSelection(recipeList.get(0));
         }
-        mBinding.layoutRecipeCollection.rvRecipeItemList.setAdapter(new AdapterRecipes(this, recipeList));
+        mBinding.layoutRecipeCollection.rvRecipeItemList.setAdapter(new AdapterRecipes(this, recipeList, this));
     }
 
 

@@ -10,9 +10,14 @@
         android:paddingEnd="@dimen/content_padding_recipe_details"
         android:paddingStart="@dimen/content_padding_recipe_details">
 
+
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
 
             <TextView xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/tv_recipe_title"
@@ -27,6 +32,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Recipe title" />
 
+            <ImageView
+                android:id="@+id/iv_header_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/header_image_size"
+                android:src="@drawable/no_video_image"
+                app:layout_constraintDimensionRatio="h,16:9"
+                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_recipe_title" />
+
             <TextView
                 android:id="@+id/tv_servings"
                 android:layout_width="match_parent"
@@ -38,7 +53,7 @@
                 android:textSize="@dimen/recipe_sub_title_font_size"
                 app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_recipe_title"
+                app:layout_constraintTop_toBottomOf="@+id/iv_header_image"
                 tools:text="Servings 10" />
 
             <com.synnapps.carouselview.CarouselView
@@ -48,16 +63,16 @@
                 android:layout_marginBottom="@dimen/dimen_min_height_ingredient_title"
                 android:layout_marginTop="@dimen/carousel_view_margin_top"
                 app:fillColor="@color/colorAccent"
-                app:indicatorGravity="bottom|center_horizontal"
+                app:indicatorGravity="top|center_horizontal"
+                app:indicatorMarginVertical="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_servings"
+                app:layout_constraintTop_toBottomOf="@+id/tv_servings"
                 app:pageColor="#00000000"
-                app:radius="6dp"
+                app:radius="5dp"
                 app:strokeColor="@color/colorPrimary"
                 app:strokeWidth="2dp" />
-
 
         </android.support.constraint.ConstraintLayout>
 

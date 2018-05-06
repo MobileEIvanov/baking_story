@@ -8,6 +8,10 @@
     <color name="color_title_sub_header">#67727c</color>
     <color name="font_color_white">#fff</color>
     <color name="steps_description_font_color">#616366</color>
-    <color name="state_default">#fff</color>
+    <color name="state_default">#65000000</color>
     <color name="font_color_black">#000</color>
+    <color name="color_title_h3">#333</color>
+    <color name="transparent_overlay">#65000000</color>
+    <color name="font_color_gray">#737373</color>
+    <color name="row_ingredient">#e7e7e7</color>
 </resources>

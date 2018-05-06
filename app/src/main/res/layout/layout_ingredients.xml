@@ -24,7 +24,6 @@
             android:text="@string/label_ingredients"
             android:textColor="@color/font_color_white"
             android:textSize="@dimen/header_ingredients_font_size"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

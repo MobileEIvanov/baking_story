@@ -1,7 +1,7 @@
 package com.bakingstory.RecipeCollection;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.bakingstory.R;
 import com.bakingstory.databinding.ItemRecipeListContentBinding;
 import com.bakingstory.entities.Recipe;
+import com.bakingstory.utils.UtilsImageLoader;
 
 import java.util.List;
 
@@ -22,10 +23,12 @@ public class AdapterRecipes extends RecyclerView.Adapter<AdapterRecipes.ViewHold
 
     private final List<Recipe> mValues;
     IRecipeInteraction mListenerItemInteraction;
+    Context mContext;
 
-    public AdapterRecipes(IRecipeInteraction listenerItemInteraction, List<Recipe> items) {
+    public AdapterRecipes(IRecipeInteraction listenerItemInteraction, List<Recipe> items, Context context) {
         mValues = items;
         mListenerItemInteraction = listenerItemInteraction;
+        mContext = context;
     }
 
     @Override
@@ -67,16 +70,19 @@ public class AdapterRecipes extends RecyclerView.Adapter<AdapterRecipes.ViewHold
         private final View.OnClickListener mListenerItemSelected = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                int position = (Integer) view.getTag();
+                mListenerItemInteraction.onRecipeSelection(mValues.get(position));
                 if (mPreviousSelection != -1) {
                     mValues.get(mPreviousSelection).setSelected(false);
                     notifyItemChanged(mPreviousSelection, mValues.get(mPreviousSelection));
                 }
 
-                int position = (Integer) view.getTag();
+
                 mPreviousSelection = position;
                 mValues.get(position).setSelected(true);
                 notifyItemChanged(position, mValues.get(position));
-                mListenerItemInteraction.onRecipeSelection(mValues.get(position));
+
             }
         };
 
@@ -98,7 +104,13 @@ public class AdapterRecipes extends RecyclerView.Adapter<AdapterRecipes.ViewHold
                 mBinding.tvRecipeName.setText(recipe.getName());
             }
 
+
+            if (recipe.getImage() != null && !recipe.getImage().isEmpty()) {
+                UtilsImageLoader.loadNetworkImage(mContext, mBinding.ivRecipeImage, recipe.getImage());
+            }
         }
+
+
     }
 
     public interface IRecipeInteraction {

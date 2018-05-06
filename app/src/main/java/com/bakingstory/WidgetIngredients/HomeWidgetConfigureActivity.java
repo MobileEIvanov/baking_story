@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeCollection.AdapterRecipes;
@@ -94,7 +93,7 @@ public class HomeWidgetConfigureActivity extends Activity implements AdapterReci
         }
 
 
-        mAdapter = new AdapterRecipes(this, recipeList);
+        mAdapter = new AdapterRecipes(this, recipeList, this);
         mListRecipes = (RecyclerView) findViewById(R.id.rv_recipe_list);
         mListRecipes.setAdapter(mAdapter);
 

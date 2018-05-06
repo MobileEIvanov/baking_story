@@ -12,4 +12,7 @@
     <dimen name="dimen_toolbar_height">72dp</dimen>
     <dimen name="steps_description_font_size">18sp</dimen>
     <dimen name="dimen_line_spacing_steps_description">2dp</dimen>
+    <dimen name="font_size_short_description">18sp</dimen>
+    <dimen name="font_size_video_not_available">24sp</dimen>
+    <dimen name="header_image_size">72dp</dimen>
 </resources>

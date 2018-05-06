@@ -55,6 +55,8 @@ dependencies {
 
     // Carousel View
     implementation 'com.synnapps:carouselview:0.1.4'
+    // Picasso image library
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 
     testImplementation 'junit:junit:4.12'
     // Force usage of support annotations in the test app, since it is internally used by the runner module.
