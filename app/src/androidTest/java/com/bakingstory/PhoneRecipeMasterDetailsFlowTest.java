@@ -1,37 +1,32 @@
 package com.bakingstory;
 
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.IdlingResource;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.ViewAssertion;
-import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
-import com.bakingstory.RecipeCollection.AdapterRecipes;
-import com.bakingstory.RecipeCollection.RecipeItemListActivity;
-import com.bakingstory.entities.Recipe;
+import com.bakingstory.RecipeCollection.ActivityRecipesList;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 /**
@@ -59,7 +54,7 @@ public class PhoneRecipeMasterDetailsFlowTest {
      * access the activity during the test.
      */
     @Rule
-    public ActivityTestRule<RecipeItemListActivity> mActivityTestRule = new ActivityTestRule<>(RecipeItemListActivity.class);
+    public ActivityTestRule<ActivityRecipesList> mActivityTestRule = new ActivityTestRule<>(ActivityRecipesList.class);
 
     @Test
     public void check_isRecipeList_Displayed() {
@@ -77,8 +72,9 @@ public class PhoneRecipeMasterDetailsFlowTest {
         onView(withId(R.id.layout_recipe_collection))
                 .perform(actionOnItemAtPosition(1, click()));
 
-        // Checks that the DetailsActivity opens with the correct  name displayed
-        onView(withId(R.id.tv_recipe_title)).check(matches(withText(RECIPE_TITILE)));
+        //Check if the selected item matches the toolbar text
+        onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar))))
+                .check(matches(withText(RECIPE_TITILE)));
     }
 
     @After

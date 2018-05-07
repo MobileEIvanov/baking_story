@@ -1,20 +1,17 @@
 package com.bakingstory;
 
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.IdlingResource;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.bakingstory.RecipeCollection.RecipeItemListActivity;
+import com.bakingstory.RecipeCollection.ActivityRecipesList;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.regex.Matcher;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -51,7 +48,7 @@ public class TabletRecipeMasterDetailsFlowTest {
      * access the activity during the test.
      */
     @Rule
-    public ActivityTestRule<RecipeItemListActivity> mActivityTestRule = new ActivityTestRule<>(RecipeItemListActivity.class);
+    public ActivityTestRule<ActivityRecipesList> mActivityTestRule = new ActivityTestRule<>(ActivityRecipesList.class);
 
     @Test
     public void check_isRecipeList_Displayed() {

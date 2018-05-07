@@ -11,16 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bakingstory.R;
-import com.bakingstory.RecipeCollection.RecipeItemListActivity;
-import com.bakingstory.RecipeDetails.BakingSteps.BakingStepsAdapter;
+import com.bakingstory.RecipeCollection.ActivityRecipesList;
+import com.bakingstory.RecipeDetails.BakingSteps.ViewPagerAdapterBakingSteps;
 import com.bakingstory.RecipeDetails.Ingredients.AdapterIngredients;
 import com.bakingstory.databinding.ContentRecipeDetailsBinding;
+import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.Recipe;
 
 /**
  * A fragment representing a single RecepieItem detail screen.
- * This fragment is either contained in a {@link RecipeItemListActivity}
- * in two-pane mode (on tablets) or a {@link RecipeItemDetailActivity}
+ * This fragment is either contained in a {@link ActivityRecipesList}
+ * in two-pane mode (on tablets) or a {@link ActivityBakingStepDetails}
  * on handsets.
  * <p>
  * <p>
@@ -146,7 +147,7 @@ public class FragmentRecipeDetails extends Fragment {
         if (mRecipeData.getSteps() == null || mRecipeData.getSteps().size() == 0) {
             return;
         }
-        mBinding.vpBakingSteps.setAdapter(new BakingStepsAdapter(getChildFragmentManager(), getActivity(), mRecipeData.getSteps()));
+        mBinding.vpBakingSteps.setAdapter(new ViewPagerAdapterBakingSteps(getChildFragmentManager(), getActivity(), mRecipeData.getSteps()));
     }
 
     /**

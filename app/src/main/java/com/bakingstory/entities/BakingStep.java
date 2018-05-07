@@ -22,6 +22,7 @@ public class BakingStep implements Parcelable {
     private String description;
     private String videoURL;
     private String thumbnailURL;
+    private boolean isSelected;
 
     protected BakingStep(Parcel in) {
         id = in.readLong();
@@ -106,5 +107,13 @@ public class BakingStep implements Parcelable {
         dest.writeString(description);
         dest.writeString(videoURL);
         dest.writeString(thumbnailURL);
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

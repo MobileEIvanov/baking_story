@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".RecipeCollection.RecipeItemListActivity"
+            android:name=".RecipeCollection.ActivityRecipesList"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,14 +22,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".RecipeDetails.RecipeItemDetailActivity"
+            android:name=".RecipeDetails.BakingSteps.ActivityBakingStepsList"
+            android:label="@string/app_name"
+            android:parentActivityName=".RecipeCollection.ActivityRecipesList"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".RecipeDetails.ActivityBakingStepDetails"
             android:label="@string/title_recepieitem_detail"
-            android:parentActivityName=".RecipeCollection.RecipeItemListActivity"
+            android:parentActivityName=".RecipeDetails.BakingSteps.ActivityBakingStepsList"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bakingstory.RecipeCollection.RecipeItemListActivity" />
+                android:value=".RecipeDetails.BakingSteps.ActivityBakingStepsList" />
         </activity>
 
         <service

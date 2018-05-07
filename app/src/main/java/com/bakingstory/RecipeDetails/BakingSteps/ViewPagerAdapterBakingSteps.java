@@ -16,14 +16,14 @@ import java.util.List;
  * Created by emil.ivanov on 5/6/18.
  * Fragment pager adapter which will return new instance for every step that we have in the baking process.
  */
-public class BakingStepsAdapter extends FragmentPagerAdapter {
+public class ViewPagerAdapterBakingSteps extends FragmentPagerAdapter {
 
 
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
     private List<BakingStep> mData;
 
 
-    public BakingStepsAdapter(FragmentManager fm, Context context, List<BakingStep> data) {
+    public ViewPagerAdapterBakingSteps(FragmentManager fm, Context context, List<BakingStep> data) {
         super(fm);
         this.mData = data;
     }

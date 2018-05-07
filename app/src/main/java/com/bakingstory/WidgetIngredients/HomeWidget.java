@@ -6,17 +6,9 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
-import android.widget.RemoteViewsService;
 
 import com.bakingstory.R;
-import com.bakingstory.RecipeCollection.RecipeItemListActivity;
-import com.bakingstory.data.HelperJsonDataParser;
-import com.bakingstory.entities.Ingredient;
-import com.bakingstory.entities.Recipe;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.bakingstory.RecipeCollection.ActivityRecipesList;
 
 /**
  * Implementation of App Widget functionality.
@@ -38,7 +30,7 @@ public class HomeWidget extends AppWidgetProvider {
 
         views.setRemoteAdapter(R.id.lv_widget_ingredients, intent);
 
-        Intent appIntent = new Intent(context, RecipeItemListActivity.class);
+        Intent appIntent = new Intent(context, ActivityRecipesList.class);
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.lv_widget_ingredients, appPendingIntent);
         // Instruct the widget manager to update the widget
