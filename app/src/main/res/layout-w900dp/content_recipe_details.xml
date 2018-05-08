@@ -6,7 +6,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="false"
+        android:fitsSystemWindows="true"
         android:paddingEnd="@dimen/content_padding_recipe_details"
         android:paddingStart="@dimen/content_padding_recipe_details">
 
@@ -14,7 +14,6 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -28,7 +27,6 @@
                 android:paddingTop="@dimen/title_padding_top"
                 android:textColor="@color/color_title_header"
                 android:textSize="@dimen/recipe_title_font_size"
-                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +37,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/header_image_size"
                 android:src="@drawable/no_video_image"
-                android:visibility="gone"
                 app:layout_constraintDimensionRatio="h,16:9"
                 app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +51,6 @@
                 android:minHeight="@dimen/dimen_min_height_text"
                 android:textColor="@color/color_title_sub_header"
                 android:textSize="@dimen/recipe_sub_title_font_size"
-                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_header_image"
@@ -65,7 +61,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/vp_baking_steps"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -82,10 +77,13 @@
                 android:id="@+id/vp_baking_steps"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/dimen_min_height_ingredient_title"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_servings" />
+
+
         </android.support.constraint.ConstraintLayout>
 
 
