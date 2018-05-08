@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
@@ -14,12 +13,10 @@ import com.bakingstory.R;
 import com.bakingstory.RecipeDetails.FragmentRecipeDetails;
 import com.bakingstory.RecipeDetails.ActivityBakingStepDetails;
 import com.bakingstory.databinding.ActivityBakingStepsContentBinding;
-import com.bakingstory.databinding.ActivityRecipesListBinding;
 import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.Recipe;
 import com.bakingstory.utils.HelperIdlingResource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +27,7 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ActivityBakingStepsList extends AppCompatActivity implements AdapterBakingSteps.IBakingStepsInteraction {
+public class ActivityBakingStepsList extends AppCompatActivity implements AdapterBakingSteps.IBakingStepsInteraction, FragmentRecipeDetails.IBakingStepChanged {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -41,6 +38,7 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
     ActivityBakingStepsContentBinding mBinding;
     private HelperIdlingResource mIdlingResource;
     private Recipe mRecipeData;
+    private AdapterBakingSteps mAdapterListBakingSteps;
 
     public static Intent newInstance(Context context, Recipe recipeData) {
         Intent intent = new Intent(context, ActivityBakingStepsList.class);
@@ -54,12 +52,10 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_baking_steps_content);
 
-        mRecipeData = getIntent().getParcelableExtra(Recipe.RECIPE_DATA);
-        setupRecyclerView(mRecipeData.getSteps());
 
-
-        initToolbar();
-
+        if (savedInstanceState == null) {
+            mRecipeData = getIntent().getParcelableExtra(Recipe.RECIPE_DATA);
+        }
         if (findViewById(R.id.fl_baking_steps_item_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
@@ -67,6 +63,12 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+        setupRecyclerView(mRecipeData.getSteps());
+
+
+        initToolbar();
+
+
     }
 
     private void setupRecyclerView(List<BakingStep> bakingStepList) {
@@ -77,10 +79,11 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
 
         if (mTwoPane) {
             bakingStepList.get(0).setSelected(true);
-            onBakingStepSelection();
+            onBakingStepSelection(0);
         }
+        mAdapterListBakingSteps = new AdapterBakingSteps(this, bakingStepList, this);
         mBinding.layoutBakingStepsCollection.rvBakingSteps
-                .setAdapter(new AdapterBakingSteps(this, bakingStepList, this));
+                .setAdapter(mAdapterListBakingSteps);
     }
 
     private void initToolbar() {
@@ -91,17 +94,39 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
     }
 
     @Override
-    public void onBakingStepSelection() {
+    public void onBakingStepSelection(int position) {
         if (mTwoPane) {
 
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fl_baking_steps_item_detail_container, FragmentRecipeDetails.newInstance(mRecipeData))
-                    .commit();
+            showFragmentRecipeDetails(position);
+
         } else {
             startActivity(ActivityBakingStepDetails.newInstance(this, mRecipeData));
         }
     }
 
+    private void showFragmentRecipeDetails(int stepIndex) {
+        FragmentRecipeDetails fragmentRecipeDetails = (FragmentRecipeDetails) getSupportFragmentManager().findFragmentByTag(FragmentRecipeDetails.TAG);
+
+        if (fragmentRecipeDetails == null) {
+            fragmentRecipeDetails = FragmentRecipeDetails.newInstance(mRecipeData);
+        }
+
+        fragmentRecipeDetails.setListenerBakingStepChanged(this);
+        if (!fragmentRecipeDetails.isAdded() && !fragmentRecipeDetails.isVisible()) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fl_baking_steps_item_detail_container, fragmentRecipeDetails, FragmentRecipeDetails.TAG)
+                    .commit();
+        } else {
+            fragmentRecipeDetails.navigateToStep(stepIndex);
+        }
+    }
+
+    @Override
+    public void onBakingPageChanged(int pageIndex) {
+        if (mAdapterListBakingSteps != null) {
+            mAdapterListBakingSteps.selectBakingStep(pageIndex);
+        }
+    }
     /**
      * Only called from test, creates and returns a new {@link HelperIdlingResource}.
      */
@@ -113,4 +138,6 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
         }
         return mIdlingResource;
     }
+
+
 }

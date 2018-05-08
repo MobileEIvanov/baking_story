@@ -6,7 +6,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="false"
+        android:fitsSystemWindows="true"
         android:paddingEnd="@dimen/content_padding_recipe_details"
         android:paddingStart="@dimen/content_padding_recipe_details">
 

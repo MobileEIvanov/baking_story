@@ -2,6 +2,7 @@ package com.bakingstory.RecipeDetails;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.support.v7.app.ActionBar;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeCollection.ActivityRecipesList;
+import com.bakingstory.RecipeDetails.BakingSteps.FullscreenVideoDialog;
 import com.bakingstory.databinding.ActivityBakingStepDetailsBinding;
 import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.Recipe;
@@ -47,7 +49,7 @@ public class ActivityBakingStepDetails extends AppCompatActivity {
 
         if (savedInstanceState == null) {
 
-            if (getIntent().hasExtra(BakingStep.BAKING_DATA)) {
+            if (getIntent().hasExtra(Recipe.RECIPE_DATA)) {
                 Recipe recipeData = getIntent().getParcelableExtra(Recipe.RECIPE_DATA);
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fl_recipe_item_detail_container,
@@ -56,9 +58,7 @@ public class ActivityBakingStepDetails extends AppCompatActivity {
             } else {
                 return;
             }
-
         }
     }
-
 
 }

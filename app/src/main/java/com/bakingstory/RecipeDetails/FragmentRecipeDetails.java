@@ -1,19 +1,23 @@
 package com.bakingstory.RecipeDetails;
 
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeCollection.ActivityRecipesList;
+import com.bakingstory.RecipeDetails.BakingSteps.FullscreenVideoDialog;
 import com.bakingstory.RecipeDetails.BakingSteps.ViewPagerAdapterBakingSteps;
 import com.bakingstory.RecipeDetails.Ingredients.AdapterIngredients;
+import com.bakingstory.base.BaseFragment;
 import com.bakingstory.databinding.ContentRecipeDetailsBinding;
 import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.Recipe;
@@ -47,7 +51,6 @@ public class FragmentRecipeDetails extends Fragment {
             if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
                 mBinding.layoutIngredients.btnToggleIngredients.animate().setDuration(ANIMATION_DURATION).rotation(ANIMATION_END_ANGLE);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                // TODO: 4/19/18 Animate icon
             } else {
                 mBinding.layoutIngredients.btnToggleIngredients.animate().setDuration(ANIMATION_DURATION).rotation(ANIMATION_START_ANGLE);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -148,6 +151,42 @@ public class FragmentRecipeDetails extends Fragment {
             return;
         }
         mBinding.vpBakingSteps.setAdapter(new ViewPagerAdapterBakingSteps(getChildFragmentManager(), getActivity(), mRecipeData.getSteps()));
+        navigateToStep(0);
+
+        mBinding.vpBakingSteps.addOnPageChangeListener(mListenerPageChanged);
+    }
+
+    private final ViewPager.OnPageChangeListener mListenerPageChanged = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            if (mListenerBakingStepChanged != null) {
+                mListenerBakingStepChanged.onBakingPageChanged(position);
+            }
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
+
+    public void setListenerBakingStepChanged(IBakingStepChanged listenerBakingStepChanged) {
+        mListenerBakingStepChanged = listenerBakingStepChanged;
+    }
+
+    private IBakingStepChanged mListenerBakingStepChanged;
+
+    /**
+     * Tracks the user interactions with the ViewPager if the page changes
+     * it will notify the listener in order to accurately update the ui.
+     */
+    public interface IBakingStepChanged {
+        void onBakingPageChanged(int pageIndex);
     }
 
     /**
@@ -180,6 +219,12 @@ public class FragmentRecipeDetails extends Fragment {
         });
     }
 
+
+    public void navigateToStep(int stepIndex) {
+        if (mBinding.vpBakingSteps.getCurrentItem() != stepIndex) {
+            mBinding.vpBakingSteps.setCurrentItem(stepIndex, true);
+        }
+    }
 }
 
 

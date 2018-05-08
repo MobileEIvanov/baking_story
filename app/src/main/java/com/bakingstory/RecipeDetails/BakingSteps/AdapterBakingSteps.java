@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 
 import com.bakingstory.R;
 import com.bakingstory.databinding.ItemBakingStepsListContentBinding;
-import com.bakingstory.databinding.ItemRecipeListContentBinding;
 import com.bakingstory.entities.BakingStep;
-import com.bakingstory.entities.Recipe;
 import com.bakingstory.utils.UtilsImageLoader;
 
 import java.util.List;
@@ -23,12 +21,12 @@ import java.util.List;
 
 public class AdapterBakingSteps extends RecyclerView.Adapter<AdapterBakingSteps.ViewHolder> {
 
-    private final List<BakingStep> mValues;
+    private final List<BakingStep> mData;
     IBakingStepsInteraction mListenerItemInteraction;
     Context mContext;
 
     public AdapterBakingSteps(IBakingStepsInteraction listenerItemInteraction, List<BakingStep> items, Context context) {
-        mValues = items;
+        mData = items;
         mListenerItemInteraction = listenerItemInteraction;
         mContext = context;
     }
@@ -53,14 +51,35 @@ public class AdapterBakingSteps extends RecyclerView.Adapter<AdapterBakingSteps.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.itemView.setTag(position);
-        holder.bindData(mValues.get(position), position);
+        holder.bindData(mData.get(position), position);
 
     }
 
+    public void selectBakingStep(int position) {
+        refreshListItemsSelectedState(position);
+    }
+
+    /**
+     * Updates the UI and the data set with the selected item.
+     * Stores {@link #mPreviousSelection} item in order to clear the UI on next selection.
+     *
+     * @param position - selected element position
+     */
+    private void refreshListItemsSelectedState(int position) {
+        if (mPreviousSelection != -1) {
+            mData.get(mPreviousSelection).setSelected(false);
+            notifyItemChanged(mPreviousSelection, mData.get(mPreviousSelection));
+        }
+
+
+        mPreviousSelection = position;
+        mData.get(position).setSelected(true);
+        notifyItemChanged(position, mData.get(position));
+    }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mData.size();
     }
 
     private int mPreviousSelection = -1;
@@ -74,16 +93,8 @@ public class AdapterBakingSteps extends RecyclerView.Adapter<AdapterBakingSteps.
             public void onClick(View view) {
 
                 int position = (Integer) view.getTag();
-                mListenerItemInteraction.onBakingStepSelection();
-                if (mPreviousSelection != -1) {
-                    mValues.get(mPreviousSelection).setSelected(false);
-                    notifyItemChanged(mPreviousSelection, mValues.get(mPreviousSelection));
-                }
-
-
-                mPreviousSelection = position;
-                mValues.get(position).setSelected(true);
-                notifyItemChanged(position, mValues.get(position));
+                mListenerItemInteraction.onBakingStepSelection(position);
+                refreshListItemsSelectedState(position);
 
             }
         };
@@ -116,6 +127,6 @@ public class AdapterBakingSteps extends RecyclerView.Adapter<AdapterBakingSteps.
     }
 
     public interface IBakingStepsInteraction {
-        void onBakingStepSelection();
+        void onBakingStepSelection(int position);
     }
 }

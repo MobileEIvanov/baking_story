@@ -12,7 +12,4 @@
     <string name="text_step_description">Step %d: %s</string>
     <string name="error_we_are_sorry_no_video_available">We are sorry .. no video available</string>
     <string name="content_description_no_video_placeholder">No video placeholder</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

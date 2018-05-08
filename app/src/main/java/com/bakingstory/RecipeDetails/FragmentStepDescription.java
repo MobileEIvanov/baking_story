@@ -2,6 +2,7 @@ package com.bakingstory.RecipeDetails;
 
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bakingstory.R;
+import com.bakingstory.RecipeDetails.BakingSteps.FullscreenVideoDialog;
 import com.bakingstory.databinding.LayoutStepDescriptionBinding;
 import com.bakingstory.entities.BakingStep;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -73,6 +75,10 @@ public class FragmentStepDescription extends Fragment {
         if (getArguments() != null) {
             mBakingStep = getArguments().getParcelable(BakingStep.BAKING_DATA);
         }
+
+
+
+
     }
 
     @Override
@@ -85,10 +91,26 @@ public class FragmentStepDescription extends Fragment {
         }
     }
 
+
+    private void showSystemUi() {
+        mBinding.videoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        hideSystemUi();
+        // TODO: 5/8/18 Show fullscreen video dialog!
+//        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            showFullScreenDialog();
+//        } else {
+//            hideFullScreenDialog();
+//        }
         if ((Util.SDK_INT <= 23 || mExoPlayer == null)) {
             if (mBakingStep != null) {
                 initializePlayer(mBakingStep.getVideoURL());
@@ -116,6 +138,21 @@ public class FragmentStepDescription extends Fragment {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
+
+    private void showFullScreenDialog() {
+        String video = "";
+        FullscreenVideoDialog.newInstance(video)
+                .show(getChildFragmentManager(), FullscreenVideoDialog.TAG);
+    }
+
+    private void hideFullScreenDialog() {
+
+        FullscreenVideoDialog dialog = (FullscreenVideoDialog) getChildFragmentManager().findFragmentByTag(FullscreenVideoDialog.TAG);
+        if (dialog != null && dialog.isVisible()) {
+            dialog.dismissAllowingStateLoss();
+        }
     }
 
     @Override

@@ -20,7 +20,6 @@
                 android:padding="@dimen/padding_16dp"
                 android:textColor="@color/color_title_h3"
                 android:textSize="@dimen/font_size_short_description"
-                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/video_container"
                 tools:text="1. Short description" />
@@ -29,7 +28,7 @@
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/video_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/dimen_video_player"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -37,12 +36,12 @@
                 <com.google.android.exoplayer2.ui.PlayerView
                     android:id="@+id/video_player_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="visible"
+                    android:layout_height="@dimen/dimen_video_player"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="visible"/>
 
                 <RelativeLayout
                     android:id="@+id/rl_video_not_available"
@@ -84,7 +83,6 @@
                 android:padding="@dimen/padding_16dp"
                 android:textColor="@color/steps_description_font_color"
                 android:textSize="@dimen/steps_description_font_size"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_step_short_description"
