@@ -124,14 +124,6 @@ public class FragmentRecipeDetails extends Fragment {
 
         initSteps();
 
-        if (mRecipeData.getName() != null && !mRecipeData.getName().isEmpty()) {
-            mBinding.tvRecipeTitle.setText(mRecipeData.getName());
-        }
-
-        if (mRecipeData.getServings() != 0) {
-            mBinding.tvServings.setText(String.format(getString(R.string.text_servings), mRecipeData.getServings()));
-        }
-
         if (mRecipeData.getIngredients() != null && mRecipeData.getIngredients().size() > 0) {
             mBinding.layoutIngredients.root.setVisibility(View.VISIBLE);
             mBinding.layoutIngredients.tvHeaderIngredients.setOnClickListener(mListenerIngredients);

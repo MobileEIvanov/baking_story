@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeDetails.FragmentRecipeDetails;
@@ -62,12 +63,22 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+
         }
         setupRecyclerView(mRecipeData.getSteps());
-
-
         initToolbar();
+        initHeader();
+    }
 
+
+    private void initHeader() {
+//        if (mRecipeData.getName() != null && !mRecipeData.getName().isEmpty()) {
+//            mBinding.layoutBakingStepsCollection.layoutHeaderRecipe.tvRecipeTitle.setText(mRecipeData.getName());
+//        }
+
+        if (mRecipeData.getServings() != 0) {
+            mBinding.layoutBakingStepsCollection.layoutHeaderRecipe.tvServings.setText(String.format(getString(R.string.text_servings), mRecipeData.getServings()));
+        }
 
     }
 
@@ -127,6 +138,7 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
             mAdapterListBakingSteps.selectBakingStep(pageIndex);
         }
     }
+
     /**
      * Only called from test, creates and returns a new {@link HelperIdlingResource}.
      */

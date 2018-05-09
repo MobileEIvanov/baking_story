@@ -3,13 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_baking_steps"
-        android:name="com.bakingstory.FragmentBakingStepsList"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutAnimation="@anim/layout_anim_fall_down"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".RecipeDetails.BakingSteps.ActivityBakingSteps"
-        tools:listitem="@layout/item_baking_steps_list_content" />
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/layout_header_recipe"
+            layout="@layout/layout_header_recipe"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_default="percent" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_baking_steps"
+            android:name="com.bakingstory.FragmentBakingStepsList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layoutAnimation="@anim/layout_anim_fall_down"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_header_recipe"
+            app:layout_constraintWidth_default="percent"
+            tools:context=".RecipeDetails.BakingSteps.ActivityBakingSteps"
+            tools:listitem="@layout/item_baking_steps_list_content" />
+    </android.support.constraint.ConstraintLayout>
 </layout>

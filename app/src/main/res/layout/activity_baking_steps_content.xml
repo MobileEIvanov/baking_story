@@ -19,6 +19,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_toolbar_height"
+                android:gravity="center"
                 android:background="@color/colorPrimary"
                 app:titleTextColor="@color/font_color_white" />
 

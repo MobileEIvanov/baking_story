@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layoutAnimation="@anim/layout_anim_fall_down"
-        app:spanCount="1"
+        app:spanCount="@integer/grid_span"
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
         tools:context="com.bakingstory.RecipeCollection.ActivityRecipesList"
         tools:listitem="@layout/item_recipe_list_content" />
