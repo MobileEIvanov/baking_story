@@ -84,7 +84,7 @@ public class FragmentRecipeDetails extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setRetainInstance(true);
         if (getArguments().containsKey(Recipe.RECIPE_DATA)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader

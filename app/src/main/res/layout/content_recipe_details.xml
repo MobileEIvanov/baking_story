@@ -6,7 +6,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="false">
 
 
         <android.support.constraint.ConstraintLayout
@@ -51,6 +51,6 @@
         <include
             android:id="@+id/layout_ingredients"
             layout="@layout/layout_ingredients"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </android.support.design.widget.CoordinatorLayout>
 </layout>

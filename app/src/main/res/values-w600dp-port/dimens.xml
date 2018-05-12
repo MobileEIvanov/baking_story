@@ -35,6 +35,7 @@
     <dimen name="header_image_size">48dp</dimen>
     <dimen name="horizontal_margin_recipe_list">56dp</dimen>
     <dimen name="item_recipe_collection_height" >200dp</dimen>
+    <dimen name="item_instruction_step_height">100dp</dimen>
     <dimen name="header_recipe_elevation">16dp</dimen>
 
 </resources>

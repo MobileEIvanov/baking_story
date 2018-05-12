@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_recipe_collection_height"
         android:layout_margin="8dp"
-        android:elevation="8dp"
+        android:elevation="4dp"
         android:background="@drawable/selector_recipe_item"
         android:orientation="horizontal">
 

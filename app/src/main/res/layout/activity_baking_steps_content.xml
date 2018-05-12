@@ -36,6 +36,5 @@
                 layout="@layout/layout_baking_steps_collection"/>
         </FrameLayout>
 
-
     </android.support.design.widget.CoordinatorLayout>
 </layout>

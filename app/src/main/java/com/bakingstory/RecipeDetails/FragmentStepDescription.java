@@ -98,27 +98,9 @@ public class FragmentStepDescription extends Fragment {
         mBinding.videoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
 
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // TODO: 5/8/18 Show fullscreen video dialog!
-//        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            showFullScreenDialog();
-//        } else {
-//            hideFullScreenDialog();
-//        }
-        if ((Util.SDK_INT <= 23 || mExoPlayer == null)) {
-            if (mBakingStep != null) {
-                initializePlayer(mBakingStep.getVideoURL());
-            }
-        }
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -143,19 +125,7 @@ public class FragmentStepDescription extends Fragment {
     }
 
 
-    private void showFullScreenDialog() {
-        String video = "";
-        FullscreenVideoDialog.newInstance(video)
-                .show(getChildFragmentManager(), FullscreenVideoDialog.TAG);
-    }
 
-    private void hideFullScreenDialog() {
-
-        FullscreenVideoDialog dialog = (FullscreenVideoDialog) getChildFragmentManager().findFragmentByTag(FullscreenVideoDialog.TAG);
-        if (dialog != null && dialog.isVisible()) {
-            dialog.dismissAllowingStateLoss();
-        }
-    }
 
     @Override
     public void onPause() {

@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeDetails.FragmentRecipeDetails;
@@ -30,6 +29,7 @@ import java.util.List;
  */
 public class ActivityBakingStepsList extends AppCompatActivity implements AdapterBakingSteps.IBakingStepsInteraction, FragmentRecipeDetails.IBakingStepChanged {
 
+    private static final String SELECTION_INDEX = "list_selection_index";
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -40,6 +40,7 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
     private HelperIdlingResource mIdlingResource;
     private Recipe mRecipeData;
     private AdapterBakingSteps mAdapterListBakingSteps;
+    private int mCurrentSelectionIndex = 0;
 
     public static Intent newInstance(Context context, Recipe recipeData) {
         Intent intent = new Intent(context, ActivityBakingStepsList.class);
@@ -56,25 +57,38 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
 
         if (savedInstanceState == null) {
             mRecipeData = getIntent().getParcelableExtra(Recipe.RECIPE_DATA);
+        } else {
+            mRecipeData = savedInstanceState.getParcelable(Recipe.RECIPE_DATA);
+            mCurrentSelectionIndex = savedInstanceState.getInt(SELECTION_INDEX);
         }
+
         if (findViewById(R.id.fl_baking_steps_item_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
-
         }
+
+        if (mRecipeData == null) {
+            finish();
+            return;
+        }
+
         setupRecyclerView(mRecipeData.getSteps());
         initToolbar();
         initHeader();
     }
 
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(Recipe.RECIPE_DATA, mRecipeData);
+        outState.putInt(SELECTION_INDEX, mCurrentSelectionIndex);
+        super.onSaveInstanceState(outState);
+    }
+
     private void initHeader() {
-//        if (mRecipeData.getName() != null && !mRecipeData.getName().isEmpty()) {
-//            mBinding.layoutBakingStepsCollection.layoutHeaderRecipe.tvRecipeTitle.setText(mRecipeData.getName());
-//        }
 
         if (mRecipeData.getServings() != 0) {
             mBinding.layoutBakingStepsCollection.layoutHeaderRecipe.tvServings.setText(String.format(getString(R.string.text_servings), mRecipeData.getServings()));
@@ -89,8 +103,8 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
         }
 
         if (mTwoPane) {
-            bakingStepList.get(0).setSelected(true);
-            onBakingStepSelection(0);
+            bakingStepList.get(mCurrentSelectionIndex).setSelected(true);
+            onBakingStepSelection(mCurrentSelectionIndex);
         }
         mAdapterListBakingSteps = new AdapterBakingSteps(this, bakingStepList, this);
         mBinding.layoutBakingStepsCollection.rvBakingSteps
@@ -107,11 +121,10 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
     @Override
     public void onBakingStepSelection(int position) {
         if (mTwoPane) {
-
-            showFragmentRecipeDetails(position);
-
+            mCurrentSelectionIndex = position;
+            showFragmentRecipeDetails(mCurrentSelectionIndex);
         } else {
-            startActivity(ActivityBakingStepDetails.newInstance(this, mRecipeData));
+            startActivity(ActivityBakingStepDetails.newInstance(this, mRecipeData, mRecipeData.getSteps().get(mCurrentSelectionIndex)));
         }
     }
 

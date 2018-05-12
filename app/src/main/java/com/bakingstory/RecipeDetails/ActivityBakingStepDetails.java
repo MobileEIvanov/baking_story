@@ -27,10 +27,20 @@ public class ActivityBakingStepDetails extends AppCompatActivity {
     ActivityBakingStepDetailsBinding mBinding;
 
 
-    public static Intent newInstance(Context context, Recipe recipeData) {
+    public static Intent newInstance(Context context, Recipe recipeData, BakingStep bakingStep) {
         Intent intent = new Intent(context, ActivityBakingStepDetails.class);
         intent.putExtra(Recipe.RECIPE_DATA, recipeData);
+        intent.putExtra(BakingStep.BAKING_DATA, bakingStep);
         return intent;
+    }
+
+    private Recipe mRecipeData;
+    private BakingStep mBakingStep;
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        displayContentBasedOnOrientation();
     }
 
     @Override
@@ -39,26 +49,80 @@ public class ActivityBakingStepDetails extends AppCompatActivity {
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_baking_step_details);
 
-        setSupportActionBar(mBinding.detailToolbar);
+        initToolbar();
 
+        if (savedInstanceState == null) {
+            if (getIntent().hasExtra(Recipe.RECIPE_DATA)) {
+                mRecipeData = getIntent().getParcelableExtra(Recipe.RECIPE_DATA);
+                mBakingStep = getIntent().getParcelableExtra(BakingStep.BAKING_DATA);
+            } else {
+                return;
+            }
+        } else {
+            mRecipeData = savedInstanceState.getParcelable(Recipe.RECIPE_DATA);
+            mBakingStep = savedInstanceState.getParcelable(BakingStep.BAKING_DATA);
+        }
+        displayContentBasedOnOrientation();
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(mBinding.detailToolbar);
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        if (savedInstanceState == null) {
+    }
 
-            if (getIntent().hasExtra(Recipe.RECIPE_DATA)) {
-                Recipe recipeData = getIntent().getParcelableExtra(Recipe.RECIPE_DATA);
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fl_recipe_item_detail_container,
-                                FragmentRecipeDetails.newInstance(recipeData))
-                        .commit();
-            } else {
-                return;
-            }
+    private void displayContentBasedOnOrientation() {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            showFullScreenDialog();
+        } else {
+            hideFullScreenDialog();
+            showRecipeDetails();
         }
     }
 
+    private void showRecipeDetails() {
+        FragmentRecipeDetails fragmentRecipeDetails = (FragmentRecipeDetails) getSupportFragmentManager().findFragmentByTag(FragmentRecipeDetails.TAG);
+
+        if (fragmentRecipeDetails == null) {
+            fragmentRecipeDetails = FragmentRecipeDetails.newInstance(mRecipeData);
+        }
+
+        if (!fragmentRecipeDetails.isAdded() && !fragmentRecipeDetails.isVisible()) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fl_recipe_item_detail_container, fragmentRecipeDetails, FragmentRecipeDetails.TAG)
+                    .commit();
+        }
+    }
+
+
+    private void showFullScreenDialog() {
+        FullscreenVideoDialog dialog = (FullscreenVideoDialog) getSupportFragmentManager().findFragmentByTag(FullscreenVideoDialog.TAG);
+        if (dialog == null) {
+            dialog = FullscreenVideoDialog.newInstance(mBakingStep);
+        }
+        if (!dialog.isAdded() && !dialog.isVisible()) {
+            dialog.show(getSupportFragmentManager(), FullscreenVideoDialog.TAG);
+        }
+
+    }
+
+    private void hideFullScreenDialog() {
+
+        FullscreenVideoDialog dialog = (FullscreenVideoDialog) getSupportFragmentManager().findFragmentByTag(FullscreenVideoDialog.TAG);
+        if (dialog != null && dialog.isVisible()) {
+            dialog.dismissAllowingStateLoss();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(Recipe.RECIPE_DATA, mRecipeData);
+        outState.putParcelable(BakingStep.BAKING_DATA, mBakingStep);
+        super.onSaveInstanceState(outState);
+    }
 }
