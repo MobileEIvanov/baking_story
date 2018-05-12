@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.View;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeDetails.FragmentRecipeDetails;
@@ -62,6 +64,11 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
             mCurrentSelectionIndex = savedInstanceState.getInt(BakingStep.BAKING_DATA);
         }
 
+        if (mRecipeData == null) {
+            finish();
+            return;
+        }
+
         if (findViewById(R.id.fl_baking_steps_item_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
@@ -70,10 +77,6 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
             mTwoPane = true;
         }
 
-        if (mRecipeData == null) {
-            finish();
-            return;
-        }
 
         setupRecyclerView(mRecipeData.getSteps());
         initToolbar();
@@ -89,11 +92,14 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
     }
 
     private void initHeader() {
+        if (!mTwoPane) {
 
-        if (mRecipeData.getServings() != 0) {
-            mBinding.layoutBakingStepsCollection.layoutHeaderRecipe.tvServings.setText(String.format(getString(R.string.text_servings), mRecipeData.getServings()));
+            if (mRecipeData.getServings() != 0) {
+                mBinding.layoutBakingStepsCollection.layoutHeaderRecipe.tvServings.setText(String.format(getString(R.string.text_servings), mRecipeData.getServings()));
+            }
+        } else {
+            mBinding.layoutBakingStepsCollection.layoutHeaderRecipe.tvServings.setVisibility(View.GONE);
         }
-
     }
 
     private void setupRecyclerView(List<BakingStep> bakingStepList) {
@@ -112,10 +118,19 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
     }
 
     private void initToolbar() {
+        String toolbarTitle;
 
-        mBinding.toolbar.setTitle(mRecipeData.getName());
+        if (mTwoPane) {
+            toolbarTitle = mRecipeData.getName() + " " + String.format(getString(R.string.text_servings), mRecipeData.getServings());
+        } else {
+            toolbarTitle = mRecipeData.getName();
+        }
+
+        mBinding.toolbar.setTitle(toolbarTitle);
         setSupportActionBar(mBinding.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
