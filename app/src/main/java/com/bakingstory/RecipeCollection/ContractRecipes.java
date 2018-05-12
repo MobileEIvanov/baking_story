@@ -1,5 +1,7 @@
 package com.bakingstory.RecipeCollection;
 
+import android.support.test.espresso.idling.CountingIdlingResource;
+
 import com.bakingstory.entities.Recipe;
 import com.bakingstory.utils.HelperIdlingResource;
 
@@ -13,11 +15,12 @@ public interface ContractRecipes {
 
 
     interface Presenter {
-        void requestRecipes(HelperIdlingResource idlingResource);
+        void requestRecipes(CountingIdlingResource idlingResource);
     }
 
     interface View {
         void showRecipesList(List<Recipe> recipesList);
+
         void showErrorView();
     }
 }

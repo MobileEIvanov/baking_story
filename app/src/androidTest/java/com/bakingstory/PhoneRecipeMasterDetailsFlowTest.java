@@ -75,6 +75,11 @@ public class PhoneRecipeMasterDetailsFlowTest {
         //Check if the selected item matches the toolbar text
         onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar))))
                 .check(matches(withText(RECIPE_TITILE)));
+
+        onView(allOf(withId(R.id.rv_baking_steps), withParent(withId(R.id.layout_baking_steps_collection))))
+                .perform(actionOnItemAtPosition(1, click()));
+
+        onView(withId(R.id.vp_baking_steps)).check(matches(isDisplayed()));
     }
 
     @After

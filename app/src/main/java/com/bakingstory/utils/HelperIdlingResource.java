@@ -8,7 +8,9 @@ import android.support.test.espresso.idling.CountingIdlingResource;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Created by emil.ivanov on 5/5/18.
+ * Helper class in order to test network request and other data resource that require time for execution.
+ *
+ * Credits to: https://github.com/googlesamples/android-testing
  */
 public class HelperIdlingResource implements IdlingResource {
 

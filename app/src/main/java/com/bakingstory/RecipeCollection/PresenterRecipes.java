@@ -1,6 +1,7 @@
 package com.bakingstory.RecipeCollection;
 
 import android.content.Context;
+import android.support.test.espresso.idling.CountingIdlingResource;
 
 import com.bakingstory.data.HelperJsonDataParser;
 import com.bakingstory.data.RestClient;
@@ -32,15 +33,15 @@ public class PresenterRecipes implements Presenter {
         this.mContext = context;
     }
 
-    HelperIdlingResource mIdlingResource;
+    CountingIdlingResource mIdlingResource;
 
     @Override
-    public void requestRecipes(HelperIdlingResource idlingResource) {
+    public void requestRecipes(CountingIdlingResource idlingResource) {
 
         // The IdlingResource is null in production.
         if (idlingResource != null) {
             mIdlingResource = idlingResource;
-            mIdlingResource.setIdleState(false);
+            mIdlingResource.increment();
         }
 
         RestDataSource restDataSource = new RestDataSource();
@@ -58,12 +59,12 @@ public class PresenterRecipes implements Presenter {
             if (recipes != null) {
                 mView.showRecipesList(recipes);
                 if (mIdlingResource != null) {
-                    mIdlingResource.setIdleState(true);
+                    mIdlingResource.decrement();
                 }
             } else {
                 mView.showErrorView();
                 if (mIdlingResource != null) {
-                    mIdlingResource.setIdleState(true);
+                    mIdlingResource.decrement();
                 }
             }
         }
@@ -75,7 +76,7 @@ public class PresenterRecipes implements Presenter {
         public void accept(Throwable throwable) {
             mView.showErrorView();
             if (mIdlingResource != null) {
-                mIdlingResource.setIdleState(true);
+                mIdlingResource.decrement();
             }
         }
     };

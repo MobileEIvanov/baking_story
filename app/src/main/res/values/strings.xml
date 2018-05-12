@@ -13,4 +13,6 @@
     <string name="error_we_are_sorry_no_video_available">We are sorry .. no video available</string>
     <string name="content_description_no_video_placeholder">No video placeholder</string>
     <string name="error_connection_message">Please check your internet connection and try again.</string>
+    <string name="title_baking_story_recipes">Baking Story - Recipes</string>
+    <string name="error_message_no_list">Oops.. there are no items available.</string>
 </resources>

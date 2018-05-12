@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.Snackbar;
 
@@ -36,8 +37,7 @@ public class ActivityRecipesList extends AppCompatActivity implements ContractRe
     private boolean mTwoPane;
 
     ActivityRecipesListBinding mBinding;
-    private HelperIdlingResource mIdlingResource;
-
+    public static CountingIdlingResource mIdlingResources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +46,12 @@ public class ActivityRecipesList extends AppCompatActivity implements ContractRe
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipes_list);
 
         setSupportActionBar(mBinding.toolbar);
-        mBinding.toolbar.setTitle(getTitle());
+        mBinding.toolbar.setTitle(R.string.title_baking_story_recipes);
 
         PresenterRecipes presenterRecipes = new PresenterRecipes(this, this);
         if (UtilsNetworkConnection.checkInternetConnection(this)) {
-            presenterRecipes.requestRecipes(mIdlingResource);
-        }else{
+            presenterRecipes.requestRecipes(mIdlingResources);
+        } else {
             Snackbar.make(mBinding.getRoot(), R.string.error_connection_message, Snackbar.LENGTH_LONG).show();
         }
 
@@ -77,7 +77,7 @@ public class ActivityRecipesList extends AppCompatActivity implements ContractRe
 
     @Override
     public void showErrorView() {
-        Snackbar.make(mBinding.getRoot(), "Failed to retrieve list", Snackbar.LENGTH_LONG)
+        Snackbar.make(mBinding.getRoot(), R.string.error_message_no_list, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 
@@ -87,10 +87,11 @@ public class ActivityRecipesList extends AppCompatActivity implements ContractRe
      */
     @VisibleForTesting
     @NonNull
-    public IdlingResource getIdlingResource() {
-        if (mIdlingResource == null) {
-            mIdlingResource = new HelperIdlingResource();
+    public CountingIdlingResource getIdlingResource() {
+        if (mIdlingResources == null) {
+            mIdlingResources = new CountingIdlingResource("RECIPES REQUEST");
+
         }
-        return mIdlingResource;
+        return mIdlingResources;
     }
 }

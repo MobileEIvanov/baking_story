@@ -167,17 +167,5 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
         }
     }
 
-    /**
-     * Only called from test, creates and returns a new {@link HelperIdlingResource}.
-     */
-    @VisibleForTesting
-    @NonNull
-    public IdlingResource getIdlingResource() {
-        if (mIdlingResource == null) {
-            mIdlingResource = new HelperIdlingResource();
-        }
-        return mIdlingResource;
-    }
-
 
 }
