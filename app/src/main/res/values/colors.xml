@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary">#003d53</color>
     <color name="colorPrimaryDark">#00303b</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="color_ingredient_header">#09C</color>
+    <color name="colorAccent">#ef7273</color>
+    <color name="color_ingredient_header">#7ac6bc</color>
     <color name="color_title_header">#000</color>
     <color name="color_title_sub_header">#67727c</color>
     <color name="font_color_white">#fff</color>

@@ -36,5 +36,7 @@
     <dimen name="horizontal_margin_recipe_list">56dp</dimen>
     <dimen name="item_recipe_collection_height" >200dp</dimen>
     <dimen name="header_recipe_elevation">16dp</dimen>
+    <dimen name="horizontal_margin_baking_steps" />
+    <dimen name="dimen_list_item_recipe_name">18sp</dimen>
 
 </resources>

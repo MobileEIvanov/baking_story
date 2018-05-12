@@ -53,4 +53,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="horizontal_margin_recipe_list">16dp</dimen>
     <dimen name="item_recipe_collection_height" >150dp</dimen>
     <dimen name="header_recipe_elevation">8dp</dimen>
+    <dimen name="horizontal_margin_baking_steps">16dp</dimen>
+    <dimen name="dimen_list_item_recipe_name">18sp</dimen>
+    <dimen name="dimen_recipe_list_padding_top">8dp</dimen>
+    <dimen name="dimen_recipe_list_padding_bottom">16dp</dimen>
 </resources>

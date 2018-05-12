@@ -2,4 +2,6 @@
 <resources>
     <dimen name="item_recipe_collection_height" >90dp</dimen>
     <dimen name="header_recipe_elevation">8dp</dimen>
+    <dimen name="horizontal_margin_baking_steps" >32dp</dimen>
+    <dimen name="dimen_list_item_recipe_name">18sp</dimen>
 </resources>

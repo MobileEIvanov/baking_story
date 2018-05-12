@@ -3,6 +3,7 @@ package com.bakingstory.RecipeDetails.BakingSteps;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -45,6 +46,8 @@ public class FullscreenVideoDialog
     private SimpleExoPlayer mExoPlayer;
     private long mSeekerPosition = 0;
 
+    private IDialogInteractions mListenerDialogActions = null;
+
     public static FullscreenVideoDialog newInstance(BakingStep bakingStep, long seekerPosition) {
         Bundle args = new Bundle();
         args.putParcelable(BakingStep.BAKING_DATA, bakingStep);
@@ -74,6 +77,10 @@ public class FullscreenVideoDialog
 
     }
 
+
+    public void setListenerDialogActions(IDialogInteractions listenerDialogActions) {
+        this.mListenerDialogActions = listenerDialogActions;
+    }
 
     @Nullable
     @Override
@@ -146,6 +153,13 @@ public class FullscreenVideoDialog
         if (Util.SDK_INT > 23) {
             releasePlayer();
         }
+    }
+
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        mListenerDialogActions.onDialogDismiss();
+        super.onDismiss(dialog);
     }
 
     /**
@@ -261,5 +275,9 @@ public class FullscreenVideoDialog
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         return dialog;
+    }
+
+    public interface IDialogInteractions {
+        void onDialogDismiss();
     }
 }

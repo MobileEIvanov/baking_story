@@ -11,9 +11,8 @@
             android:id="@+id/layout_header_recipe"
             layout="@layout/layout_header_recipe"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_default="percent" />
 
@@ -22,14 +21,16 @@
             android:name="com.bakingstory.FragmentBakingStepsList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/horizontal_margin_baking_steps"
+            android:layout_marginStart="@dimen/horizontal_margin_baking_steps"
+            android:paddingTop="@dimen/dimen_recipe_list_padding_top"
+            android:paddingBottom="@dimen/dimen_recipe_list_padding_bottom"
             android:layoutAnimation="@anim/layout_anim_fall_down"
             app:layoutManager="LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_header_recipe"
-            app:layout_constraintWidth_default="percent"
             tools:context=".RecipeDetails.BakingSteps.ActivityBakingSteps"
             tools:listitem="@layout/item_baking_steps_list_content" />
     </android.support.constraint.ConstraintLayout>

@@ -11,11 +11,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppThemeColdStart">
         <activity
             android:name=".RecipeCollection.ActivityRecipesList"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,14 +30,10 @@
 
         <activity
             android:name=".RecipeDetails.ActivityBakingStepDetails"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_recepieitem_detail"
             android:parentActivityName=".RecipeDetails.BakingSteps.ActivityBakingStepsList"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".RecipeDetails.BakingSteps.ActivityBakingStepsList" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <service
             android:name=".WidgetIngredients.IngredientService"

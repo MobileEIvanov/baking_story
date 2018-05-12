@@ -41,6 +41,7 @@ public class ActivityRecipesList extends AppCompatActivity implements ContractRe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipes_list);
 

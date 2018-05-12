@@ -15,12 +15,14 @@ import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.Recipe;
 
 /**
- * An activity representing a single RecepieItem detail screen. This
+ * An activity representing a single RecipeItem detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
  * in a {@link ActivityRecipesList}.
  */
-public class ActivityBakingStepDetails extends AppCompatActivity implements FragmentRecipeDetails.IBakingStepChanged {
+public class ActivityBakingStepDetails extends AppCompatActivity
+        implements FragmentRecipeDetails.IBakingStepChanged,
+        FullscreenVideoDialog.IDialogInteractions {
 
     //    https://pngtree.com/pay?pay_ref=
     private ActivityBakingStepDetailsBinding mBinding;
@@ -123,6 +125,7 @@ public class ActivityBakingStepDetails extends AppCompatActivity implements Frag
             dialog.refreshData(mBakingStep);
         }
 
+        dialog.setListenerDialogActions(this);
         if (!dialog.isAdded() && !dialog.isVisible()) {
             dialog.show(getSupportFragmentManager(), FullscreenVideoDialog.TAG);
         }
@@ -147,11 +150,19 @@ public class ActivityBakingStepDetails extends AppCompatActivity implements Frag
     @Override
     public void onBackPressed() {
         finish();
+        super.onBackPressed();
     }
 
     @Override
     public void onBakingPageChanged(int pageIndex) {
         mCurrentSelectedStep = pageIndex;
         mBakingStep = mRecipeData.getSteps().get(mCurrentSelectedStep);
+    }
+
+    @Override
+    public void onDialogDismiss() {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            onBackPressed();
+        }
     }
 }
