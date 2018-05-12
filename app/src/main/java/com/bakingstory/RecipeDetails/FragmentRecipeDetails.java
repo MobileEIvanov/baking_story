@@ -1,26 +1,47 @@
 package com.bakingstory.RecipeDetails;
 
-import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.VideoView;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeCollection.ActivityRecipesList;
-import com.bakingstory.RecipeDetails.BakingSteps.FullscreenVideoDialog;
 import com.bakingstory.RecipeDetails.BakingSteps.ViewPagerAdapterBakingSteps;
 import com.bakingstory.RecipeDetails.Ingredients.AdapterIngredients;
-import com.bakingstory.base.BaseFragment;
 import com.bakingstory.databinding.ContentRecipeDetailsBinding;
 import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.Recipe;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a single RecepieItem detail screen.
@@ -43,7 +64,7 @@ public class FragmentRecipeDetails extends Fragment {
     private Recipe mRecipeData;
     private ContentRecipeDetailsBinding mBinding;
     private BottomSheetBehavior mBottomSheetBehavior;
-
+    private int mCurrentSelection = 0;
 
     View.OnClickListener mListenerIngredients = new View.OnClickListener() {
         @Override
@@ -58,21 +79,16 @@ public class FragmentRecipeDetails extends Fragment {
         }
     };
 
-    public static FragmentRecipeDetails newInstance(Recipe recipe) {
+    public static FragmentRecipeDetails newInstance(Recipe recipe, int currentSelection) {
         Bundle args = new Bundle();
         args.putParcelable(Recipe.RECIPE_DATA, recipe);
+        args.putInt(BakingStep.BAKING_DATA, currentSelection);
         FragmentRecipeDetails fragmentRecipeDetails = new FragmentRecipeDetails();
         fragmentRecipeDetails.setArguments(args);
 
         return fragmentRecipeDetails;
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -85,12 +101,18 @@ public class FragmentRecipeDetails extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        if (getArguments().containsKey(Recipe.RECIPE_DATA)) {
+
+        if (savedInstanceState != null) {
+            mRecipeData = savedInstanceState.getParcelable(Recipe.RECIPE_DATA);
+            mCurrentSelection = savedInstanceState.getInt(BakingStep.BAKING_DATA);
+        } else if (getArguments().containsKey(Recipe.RECIPE_DATA)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             mRecipeData = getArguments().getParcelable(Recipe.RECIPE_DATA);
+            mCurrentSelection = getArguments().getInt(BakingStep.BAKING_DATA);
         }
+
     }
 
     @Override
@@ -112,6 +134,13 @@ public class FragmentRecipeDetails extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable(Recipe.RECIPE_DATA, mRecipeData);
+        outState.putInt(BakingStep.BAKING_DATA, mCurrentSelection);
+        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -142,8 +171,8 @@ public class FragmentRecipeDetails extends Fragment {
         if (mRecipeData.getSteps() == null || mRecipeData.getSteps().size() == 0) {
             return;
         }
-        mBinding.vpBakingSteps.setAdapter(new ViewPagerAdapterBakingSteps(getChildFragmentManager(), getActivity(), mRecipeData.getSteps()));
-        navigateToStep(0);
+        mBinding.vpBakingSteps.setAdapter(new ViewPagerAdapterBakingSteps(getChildFragmentManager(), mRecipeData.getSteps()));
+        navigateToStep(mCurrentSelection);
 
         mBinding.vpBakingSteps.addOnPageChangeListener(mListenerPageChanged);
     }
@@ -151,14 +180,15 @@ public class FragmentRecipeDetails extends Fragment {
     private final ViewPager.OnPageChangeListener mListenerPageChanged = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            if (mListenerBakingStepChanged != null) {
-                mListenerBakingStepChanged.onBakingPageChanged(position);
-            }
+
         }
 
         @Override
         public void onPageSelected(int position) {
-
+            if (mListenerBakingStepChanged != null) {
+                mCurrentSelection = position;
+                mListenerBakingStepChanged.onBakingPageChanged(position);
+            }
         }
 
         @Override

@@ -59,7 +59,7 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
             mRecipeData = getIntent().getParcelableExtra(Recipe.RECIPE_DATA);
         } else {
             mRecipeData = savedInstanceState.getParcelable(Recipe.RECIPE_DATA);
-            mCurrentSelectionIndex = savedInstanceState.getInt(SELECTION_INDEX);
+            mCurrentSelectionIndex = savedInstanceState.getInt(BakingStep.BAKING_DATA);
         }
 
         if (findViewById(R.id.fl_baking_steps_item_detail_container) != null) {
@@ -84,7 +84,7 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(Recipe.RECIPE_DATA, mRecipeData);
-        outState.putInt(SELECTION_INDEX, mCurrentSelectionIndex);
+        outState.putInt(BakingStep.BAKING_DATA, mCurrentSelectionIndex);
         super.onSaveInstanceState(outState);
     }
 
@@ -120,11 +120,11 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
 
     @Override
     public void onBakingStepSelection(int position) {
+        mCurrentSelectionIndex = position;
         if (mTwoPane) {
-            mCurrentSelectionIndex = position;
             showFragmentRecipeDetails(mCurrentSelectionIndex);
         } else {
-            startActivity(ActivityBakingStepDetails.newInstance(this, mRecipeData, mRecipeData.getSteps().get(mCurrentSelectionIndex)));
+            startActivity(ActivityBakingStepDetails.newInstance(this, mRecipeData, mCurrentSelectionIndex));
         }
     }
 
@@ -132,7 +132,7 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
         FragmentRecipeDetails fragmentRecipeDetails = (FragmentRecipeDetails) getSupportFragmentManager().findFragmentByTag(FragmentRecipeDetails.TAG);
 
         if (fragmentRecipeDetails == null) {
-            fragmentRecipeDetails = FragmentRecipeDetails.newInstance(mRecipeData);
+            fragmentRecipeDetails = FragmentRecipeDetails.newInstance(mRecipeData, mCurrentSelectionIndex);
         }
 
         fragmentRecipeDetails.setListenerBakingStepChanged(this);

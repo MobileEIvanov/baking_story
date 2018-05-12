@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeCollection.ActivityRecipesList;
@@ -21,16 +20,16 @@ import com.bakingstory.entities.Recipe;
  * item details are presented side-by-side with a list of items
  * in a {@link ActivityRecipesList}.
  */
-public class ActivityBakingStepDetails extends AppCompatActivity {
+public class ActivityBakingStepDetails extends AppCompatActivity implements FragmentRecipeDetails.IBakingStepChanged {
 
     //    https://pngtree.com/pay?pay_ref=
-    ActivityBakingStepDetailsBinding mBinding;
+    private ActivityBakingStepDetailsBinding mBinding;
+    private int mCurrentSelectedStep = 0;
 
-
-    public static Intent newInstance(Context context, Recipe recipeData, BakingStep bakingStep) {
+    public static Intent newInstance(Context context, Recipe recipeData, int bakingStepPosition) {
         Intent intent = new Intent(context, ActivityBakingStepDetails.class);
         intent.putExtra(Recipe.RECIPE_DATA, recipeData);
-        intent.putExtra(BakingStep.BAKING_DATA, bakingStep);
+        intent.putExtra(BakingStep.BAKING_DATA, bakingStepPosition);
         return intent;
     }
 
@@ -54,13 +53,16 @@ public class ActivityBakingStepDetails extends AppCompatActivity {
         if (savedInstanceState == null) {
             if (getIntent().hasExtra(Recipe.RECIPE_DATA)) {
                 mRecipeData = getIntent().getParcelableExtra(Recipe.RECIPE_DATA);
-                mBakingStep = getIntent().getParcelableExtra(BakingStep.BAKING_DATA);
+                mCurrentSelectedStep = getIntent().getIntExtra(BakingStep.BAKING_DATA, 0);
+                mBakingStep = mRecipeData.getSteps().get(mCurrentSelectedStep);
             } else {
                 return;
             }
         } else {
             mRecipeData = savedInstanceState.getParcelable(Recipe.RECIPE_DATA);
-            mBakingStep = savedInstanceState.getParcelable(BakingStep.BAKING_DATA);
+            mCurrentSelectedStep = savedInstanceState.getInt(BakingStep.BAKING_DATA);
+            mBakingStep = mRecipeData.getSteps().get(mCurrentSelectedStep);
+
         }
         displayContentBasedOnOrientation();
     }
@@ -68,15 +70,14 @@ public class ActivityBakingStepDetails extends AppCompatActivity {
     private void initToolbar() {
         setSupportActionBar(mBinding.detailToolbar);
         // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
     }
 
     private void displayContentBasedOnOrientation() {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            removeRecipeDetails();
             showFullScreenDialog();
         } else {
             hideFullScreenDialog();
@@ -85,12 +86,13 @@ public class ActivityBakingStepDetails extends AppCompatActivity {
     }
 
     private void showRecipeDetails() {
-        FragmentRecipeDetails fragmentRecipeDetails = (FragmentRecipeDetails) getSupportFragmentManager().findFragmentByTag(FragmentRecipeDetails.TAG);
+        FragmentRecipeDetails fragmentRecipeDetails = (FragmentRecipeDetails) getSupportFragmentManager()
+                .findFragmentByTag(FragmentRecipeDetails.TAG);
 
         if (fragmentRecipeDetails == null) {
-            fragmentRecipeDetails = FragmentRecipeDetails.newInstance(mRecipeData);
+            fragmentRecipeDetails = FragmentRecipeDetails.newInstance(mRecipeData, mCurrentSelectedStep);
         }
-
+        fragmentRecipeDetails.setListenerBakingStepChanged(this);
         if (!fragmentRecipeDetails.isAdded() && !fragmentRecipeDetails.isVisible()) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -99,12 +101,28 @@ public class ActivityBakingStepDetails extends AppCompatActivity {
         }
     }
 
+    private void removeRecipeDetails() {
+        FragmentRecipeDetails fragmentRecipeDetails = (FragmentRecipeDetails) getSupportFragmentManager().findFragmentByTag(FragmentRecipeDetails.TAG);
+        if (fragmentRecipeDetails == null) {
+            return;
+        }
+
+        if (fragmentRecipeDetails.isAdded() && fragmentRecipeDetails.isVisible()) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(fragmentRecipeDetails)
+                    .commit();
+        }
+    }
 
     private void showFullScreenDialog() {
         FullscreenVideoDialog dialog = (FullscreenVideoDialog) getSupportFragmentManager().findFragmentByTag(FullscreenVideoDialog.TAG);
         if (dialog == null) {
-            dialog = FullscreenVideoDialog.newInstance(mBakingStep);
+            dialog = FullscreenVideoDialog.newInstance(mBakingStep, 0);
+        } else {
+            dialog.refreshData(mBakingStep);
         }
+
         if (!dialog.isAdded() && !dialog.isVisible()) {
             dialog.show(getSupportFragmentManager(), FullscreenVideoDialog.TAG);
         }
@@ -122,7 +140,18 @@ public class ActivityBakingStepDetails extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(Recipe.RECIPE_DATA, mRecipeData);
-        outState.putParcelable(BakingStep.BAKING_DATA, mBakingStep);
+        outState.putInt(BakingStep.BAKING_DATA, mCurrentSelectedStep);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
+    public void onBakingPageChanged(int pageIndex) {
+        mCurrentSelectedStep = pageIndex;
+        mBakingStep = mRecipeData.getSteps().get(mCurrentSelectedStep);
     }
 }

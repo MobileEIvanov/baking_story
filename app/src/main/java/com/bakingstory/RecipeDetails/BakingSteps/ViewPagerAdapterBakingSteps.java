@@ -1,9 +1,8 @@
 package com.bakingstory.RecipeDetails.BakingSteps;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
@@ -16,21 +15,21 @@ import java.util.List;
  * Created by emil.ivanov on 5/6/18.
  * Fragment pager adapter which will return new instance for every step that we have in the baking process.
  */
-public class ViewPagerAdapterBakingSteps extends FragmentPagerAdapter {
+public class ViewPagerAdapterBakingSteps extends FragmentStatePagerAdapter {
 
 
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
     private List<BakingStep> mData;
 
 
-    public ViewPagerAdapterBakingSteps(FragmentManager fm, Context context, List<BakingStep> data) {
+    public ViewPagerAdapterBakingSteps(FragmentManager fm, List<BakingStep> data) {
         super(fm);
         this.mData = data;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return FragmentStepDescription.newInstance(mData.get(position));
+        return FragmentStepDescription.newInstance(mData.get(position), position);
     }
 
     @Override

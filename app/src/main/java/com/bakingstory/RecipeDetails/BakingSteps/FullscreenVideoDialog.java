@@ -15,13 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.RelativeLayout;
 
 import com.bakingstory.R;
-import com.bakingstory.RecipeDetails.FragmentStepDescription;
 import com.bakingstory.databinding.LayoutFullscreenVideoDialogBinding;
 import com.bakingstory.entities.BakingStep;
-import com.bakingstory.entities.Recipe;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
@@ -43,12 +40,15 @@ public class FullscreenVideoDialog
         extends DialogFragment {
 
     public static final String TAG = "fullscreen";
+    public static final String SEEKER_POSITION = "seeker_position";
     private ComponentListener componentListener;
     private SimpleExoPlayer mExoPlayer;
+    private long mSeekerPosition = 0;
 
-    public static FullscreenVideoDialog newInstance(BakingStep bakingStep) {
+    public static FullscreenVideoDialog newInstance(BakingStep bakingStep, long seekerPosition) {
         Bundle args = new Bundle();
         args.putParcelable(BakingStep.BAKING_DATA, bakingStep);
+        args.putLong(SEEKER_POSITION, seekerPosition);
         FullscreenVideoDialog dialog = new FullscreenVideoDialog();
         dialog.setArguments(args);
         return dialog;
@@ -60,13 +60,18 @@ public class FullscreenVideoDialog
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if (savedInstanceState != null) {
+            mSeekerPosition = savedInstanceState.getLong(SEEKER_POSITION, 0);
+            mBakingStep = savedInstanceState.getParcelable(BakingStep.BAKING_DATA);
+        } else if (getArguments() != null) {
             mBakingStep = getArguments().getParcelable(BakingStep.BAKING_DATA);
+            mSeekerPosition = getArguments().getLong(SEEKER_POSITION, 0);
             if (mBakingStep == null) {
                 dismissAllowingStateLoss();
             }
         }
         setRetainInstance(true);
+
     }
 
 
@@ -74,6 +79,12 @@ public class FullscreenVideoDialog
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.layout_fullscreen_video_dialog, container, false);
+
+        if (mBakingStep != null) {
+            hideSystemUi();
+            initializePlayer(mBakingStep.getVideoURL());
+        }
+
         populateCurrentBakingStep(mBakingStep);
         return mBinding.getRoot();
     }
@@ -92,10 +103,12 @@ public class FullscreenVideoDialog
     }
 
 
-    private void showSystemUi() {
-        mBinding.videoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putLong(SEEKER_POSITION, mExoPlayer.getCurrentPosition());
+        outState.putParcelable(BakingStep.BAKING_DATA, mBakingStep);
+        super.onSaveInstanceState(outState);
     }
-
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -111,19 +124,12 @@ public class FullscreenVideoDialog
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             dialog.getWindow().setLayout(width, height);
         }
-
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (Util.SDK_INT > 23) {
-            if (mBakingStep != null) {
-                hideSystemUi();
-                initializePlayer(mBakingStep.getVideoURL());
-            }
-        }
+
     }
 
     @Override
@@ -173,6 +179,7 @@ public class FullscreenVideoDialog
 
         mExoPlayer.prepare(mediaSource, true, true);
         mExoPlayer.addListener(componentListener);
+
         mExoPlayer.setPlayWhenReady(false);
 
         mBinding.videoPlayerView.setPlayer(mExoPlayer);
@@ -212,6 +219,10 @@ public class FullscreenVideoDialog
         }
     }
 
+    public void refreshData(BakingStep bakingStep) {
+        mBakingStep = bakingStep;
+    }
+
     private class ComponentListener extends Player.DefaultEventListener {
 
         @Override
@@ -247,7 +258,7 @@ public class FullscreenVideoDialog
         // creating the fullscreen dialog
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.YELLOW));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         return dialog;
     }
