@@ -6,11 +6,8 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.bakingstory.R;
-import com.bakingstory.data.HelperJsonDataParser;
 import com.bakingstory.entities.Ingredient;
-import com.bakingstory.entities.Recipe;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +45,7 @@ public class BakingIngredientsRemoteFactory implements RemoteViewsService.Remote
         appWidgetId = PreferensesManager.loadLastWidgetIdPref(mContext);
         if (appWidgetId != -1) {
             mRecipeTitle = PreferensesManager.loadTitlePref(mContext, appWidgetId);
-            ingredients = PreferensesManager.getSelectedIngredientsSteps(mContext);
+            ingredients = PreferensesManager.loadSelectedIngredientsSteps(mContext);
 
 
         }

@@ -9,6 +9,9 @@ import android.widget.RemoteViews;
 
 import com.bakingstory.R;
 import com.bakingstory.RecipeCollection.ActivityRecipesList;
+import com.bakingstory.RecipeDetails.ActivityBakingStepDetails;
+import com.bakingstory.RecipeDetails.BakingSteps.ActivityBakingStepsList;
+import com.bakingstory.entities.Recipe;
 
 /**
  * Implementation of App Widget functionality.
@@ -30,7 +33,9 @@ public class HomeWidget extends AppWidgetProvider {
         views.setRemoteAdapter(R.id.lv_widget_ingredients, intent);
 
 
-        Intent appIntent = new Intent(context, ActivityRecipesList.class);
+        Recipe recipe = PreferensesManager.loadSelectedRecipe(context);
+        Intent appIntent = new Intent(context, ActivityBakingStepsList.class);
+        appIntent.putExtra(Recipe.RECIPE_DATA, recipe);
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.lv_widget_ingredients, appPendingIntent);
         // Instruct the widget manager to update the widget

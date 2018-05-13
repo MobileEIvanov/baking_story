@@ -1,10 +1,10 @@
 package com.bakingstory.RecipeCollection;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
-import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.Snackbar;
@@ -21,25 +21,16 @@ import com.bakingstory.utils.UtilsNetworkConnection;
 import java.util.List;
 
 /**
- * An activity representing a list of Recepies. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ActivityBakingStepDetails} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
+ * An activity representing a list of Recipes.
  */
 public class ActivityRecipesList extends AppCompatActivity implements ContractRecipes.View,
         AdapterRecipes.IRecipeInteraction {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
 
     ActivityRecipesListBinding mBinding;
     public static CountingIdlingResource mIdlingResources;
     PresenterRecipes mPresenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,15 +67,23 @@ public class ActivityRecipesList extends AppCompatActivity implements ContractRe
 
     private void setupRecyclerView(List<Recipe> recipeList) {
 
+        AdapterRecipes adapterRecipes = new AdapterRecipes(this, recipeList, this);
         mBinding.layoutRecipeCollection.rvRecipeItemList
-                .setAdapter(new AdapterRecipes(this, recipeList, this));
+                .setAdapter(adapterRecipes);
         mBinding.layoutEmptyView.getRoot().setVisibility(View.INVISIBLE);
         mBinding.layoutRecipeCollection.getRoot().setVisibility(View.VISIBLE);
+
+        //Handle navigation from widget
+        if (getIntent() != null && getIntent().hasExtra(Recipe.RECIPE_DATA)) {
+            int selectedRecipe = getIntent().getIntExtra(Recipe.RECIPE_DATA, 0);
+            mBinding.layoutRecipeCollection.rvRecipeItemList.getChildAt(selectedRecipe).callOnClick();
+        }
+
     }
 
 
     @Override
-    public void onRecipeSelection(Recipe recipe) {
+    public void onRecipeSelection(Recipe recipe, int position) {
 
         startActivity(ActivityBakingStepsList.newInstance(this, recipe));
     }

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.bakingstory.R;
@@ -24,6 +23,8 @@ import java.util.List;
 
 import static com.bakingstory.WidgetIngredients.PreferensesManager.saveLastWidgetIdPref;
 import static com.bakingstory.WidgetIngredients.PreferensesManager.saveSelectedIngredientsSteps;
+import static com.bakingstory.WidgetIngredients.PreferensesManager.saveSelectedRecipe;
+import static com.bakingstory.WidgetIngredients.PreferensesManager.saveSelectedRecipeId;
 import static com.bakingstory.WidgetIngredients.PreferensesManager.saveTitlePref;
 
 /**
@@ -75,13 +76,14 @@ public class HomeWidgetConfigureActivity extends AppCompatActivity implements Co
 
 
     @Override
-    public void onRecipeSelection(Recipe recipe) {
+    public void onRecipeSelection(Recipe recipe, int position) {
         final Context context = HomeWidgetConfigureActivity.this;
 
         // When the button is clicked, store the string locally
         saveTitlePref(context, mAppWidgetId, recipe.getName());
         saveLastWidgetIdPref(context, mAppWidgetId);
         saveSelectedIngredientsSteps(this, recipe.getIngredients());
+        saveSelectedRecipe(this, recipe);
 
         // It is the responsibility of the configuration activity to update the app widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);

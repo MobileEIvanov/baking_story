@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.bakingstory.R;
 import com.bakingstory.entities.Ingredient;
+import com.bakingstory.entities.Recipe;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ public class PreferensesManager {
     private static final String PREF_PREFIX_KEY = "appwidget_";
     private static final String PREF_LAST_WIDGET_KEY = "lass_widget_id";
     private static final String PREF_SELECTED_INGREDIENTS = "selected_ingredients";
+    private static final String PREF_SELECTED_RECIPE = "selected_recipe";
+    private static final String PREF_RECIPE_ID = "recipe_id";
 
     public static void saveSelectedIngredientsSteps(Context context, List<Ingredient> bakingSteps) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
@@ -31,7 +34,7 @@ public class PreferensesManager {
     }
 
 
-    public static ArrayList<Ingredient> getSelectedIngredientsSteps(Context context) {
+    public static ArrayList<Ingredient> loadSelectedIngredientsSteps(Context context) {
         List<Ingredient> list;
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, 0);
         String jsonList = sharedPreferences.getString(PREF_SELECTED_INGREDIENTS, null);
@@ -48,6 +51,48 @@ public class PreferensesManager {
             return null;
         }
 
+    }
+
+    public static void saveSelectedRecipe(Context context, Recipe recipe) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(recipe);
+        prefs.putString(PREF_SELECTED_RECIPE, json);
+        prefs.apply();
+    }
+
+
+    public static Recipe loadSelectedRecipe(Context context) {
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, 0);
+        String jsonList = sharedPreferences.getString(PREF_SELECTED_RECIPE, null);
+
+        if (sharedPreferences.contains(PREF_SELECTED_RECIPE)) {
+
+            Gson gson = new Gson();
+            Recipe recipe = gson.fromJson(jsonList, Recipe.class);
+
+            return recipe;
+        } else {
+            return null;
+        }
+
+    }
+
+
+    // Used to send the pending intent and navigate within the application
+    static void saveSelectedRecipeId(Context context, int recipeId) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putInt(PREF_RECIPE_ID, recipeId);
+        prefs.apply();
+    }
+
+    // Used to send the pending intent and navigate within the application
+    // If there is no preference saved, get the default from a resource
+    static int loadRecipeId(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        int widget = prefs.getInt(PREF_RECIPE_ID, 0);
+        return widget;
     }
 
 

@@ -72,7 +72,7 @@ public class AdapterRecipes extends RecyclerView.Adapter<AdapterRecipes.ViewHold
             public void onClick(View view) {
 
                 int position = (Integer) view.getTag();
-                mListenerItemInteraction.onRecipeSelection(mValues.get(position));
+                mListenerItemInteraction.onRecipeSelection(mValues.get(position), position);
                 if (mPreviousSelection != -1) {
                     mValues.get(mPreviousSelection).setSelected(false);
                     notifyItemChanged(mPreviousSelection, mValues.get(mPreviousSelection));
@@ -114,6 +114,6 @@ public class AdapterRecipes extends RecyclerView.Adapter<AdapterRecipes.ViewHold
     }
 
     public interface IRecipeInteraction {
-        void onRecipeSelection(Recipe recipe);
+        void onRecipeSelection(Recipe recipe, int position);
     }
 }
