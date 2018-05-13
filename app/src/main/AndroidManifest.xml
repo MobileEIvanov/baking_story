@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.bakingstory">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,9 +13,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeColdStart">
+        android:theme="@style/AppThemeColdStart"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".RecipeCollection.ActivityRecipesList"
+            android:name=".recipes_collection.ActivityRecipesList"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,23 +26,23 @@
         </activity>
 
         <activity
-            android:name=".RecipeDetails.BakingSteps.ActivityBakingStepsList"
+            android:name=".recipe_details.baking_steps.ActivityBakingStepsList"
             android:label="@string/app_name"
-            android:parentActivityName=".RecipeCollection.ActivityRecipesList"
+            android:parentActivityName=".recipes_collection.ActivityRecipesList"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".RecipeDetails.ActivityBakingStepDetails"
+            android:name=".recipe_details.ActivityBakingStepDetails"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_recepieitem_detail"
-            android:parentActivityName=".RecipeDetails.BakingSteps.ActivityBakingStepsList"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".recipe_details.baking_steps.ActivityBakingStepsList"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".WidgetIngredients.IngredientService"
+            android:name=".widget_ingredients.IngredientService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <receiver android:name=".WidgetIngredients.HomeWidget">
+        <receiver android:name=".widget_ingredients.HomeWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -51,7 +53,7 @@
         </receiver>
 
         <activity
-            android:name=".WidgetIngredients.HomeWidgetConfigureActivity"
+            android:name=".widget_ingredients.HomeWidgetConfigureActivity"
             android:theme="@style/AppThemeColdStart">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

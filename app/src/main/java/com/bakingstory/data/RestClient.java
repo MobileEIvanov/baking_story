@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * {@link HttpLoggingInterceptor}  provides log of all http requests visible in the Logcat
  */
 
-public class RestClient {
+class RestClient {
 
 
     static QueryRequest initConnection(String baseURL) {

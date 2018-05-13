@@ -30,7 +30,8 @@
             app:layout_constraintDimensionRatio="h,16:9"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_servings" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_servings"
+            android:contentDescription="@string/content_header_image" />
 
         <TextView
             android:id="@+id/tv_servings"
@@ -43,7 +44,6 @@
             android:textSize="@dimen/recipe_sub_title_font_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_recipe_title"
             tools:text="Servings 10" />
         <View
             android:layout_width="match_parent"

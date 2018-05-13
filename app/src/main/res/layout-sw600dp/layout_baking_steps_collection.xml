@@ -5,7 +5,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.bakingstory.RecipeDetails.BakingSteps.ActivityBakingStepsList">
+        tools:context="com.bakingstory.recipe_details.baking_steps.ActivityBakingStepsList">
 
         <include
             android:id="@+id/layout_header_recipe"
@@ -43,10 +43,10 @@
                 android:layout_marginEnd="@dimen/margin_medium"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_low"
-                app:layoutManager="LinearLayoutManager"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 app:layout_constraintWidth_default="percent"
                 app:layout_constraintWidth_percent="0.3"
-                tools:context="com.bakingstory.RecipeCollection.ActivityRecipesList"
+                tools:context="com.bakingstory.recipes_collection.ActivityRecipesList"
                 tools:listitem="@layout/item_recipe_list_content" />
 
             <View

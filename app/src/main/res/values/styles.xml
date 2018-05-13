@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -22,7 +22,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="Theme.AppCompat.NoActionBar" />
 
-    <style name="MaterialDialogSheet" parent="@android:style/Theme.Dialog">
+    <style name="MaterialDialogSheet" parent="@android:style/Theme.Dialog" tools:keep="@style/MaterialDialogSheet">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -32,12 +32,12 @@
 
     </style>
 
-    <style name="DialogStyle" parent="AppTheme.NoActionBar">
+    <style name="DialogStyle" parent="AppTheme.NoActionBar" tools:keep="@style/DialogStyle">
         <item name="android:windowMinWidthMajor">97%</item>
         <item name="android:windowMinWidthMinor">97%</item>
     </style>
 
-    <style name="DialogAnimation">
+    <style name="DialogAnimation" tools:keep="@style/DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/anim_slide_up</item>
         <item name="android:windowExitAnimation">@anim/anim_slide_down</item>
     </style>

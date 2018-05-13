@@ -6,7 +6,7 @@ package com.bakingstory.entities;
  * {@link Ingredient} Use to abstract the possible measurement types
  */
 
-public interface MeasurementTypes {
+interface MeasurementTypes {
 
     String GRAMS = "G";
     String TBLSP = "TBLSP";

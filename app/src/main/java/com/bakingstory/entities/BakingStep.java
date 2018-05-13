@@ -1,6 +1,5 @@
 package com.bakingstory.entities;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -14,6 +13,7 @@ import android.os.Parcelable;
  * "thumbnailURL":""
  */
 
+@SuppressWarnings({"WeakerAccess", "CanBeFinal"})
 public class BakingStep implements Parcelable {
 
     public static final String BAKING_DATA = "baking_data";
@@ -48,40 +48,20 @@ public class BakingStep implements Parcelable {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getShortDescription() {
         return shortDescription;
-    }
-
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getVideoURL() {
         return videoURL;
     }
 
-    public void setVideoURL(String videoURL) {
-        this.videoURL = videoURL;
-    }
-
     public String getThumbnailURL() {
         return thumbnailURL;
-    }
-
-    public void setThumbnailURL(String thumbnailURL) {
-        this.thumbnailURL = thumbnailURL;
     }
 
     @Override

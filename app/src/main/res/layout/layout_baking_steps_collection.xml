@@ -26,12 +26,12 @@
             android:paddingTop="@dimen/dimen_recipe_list_padding_top"
             android:paddingBottom="@dimen/dimen_recipe_list_padding_bottom"
             android:layoutAnimation="@anim/layout_anim_fall_down"
-            app:layoutManager="LinearLayoutManager"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_header_recipe"
-            tools:context=".RecipeDetails.BakingSteps.ActivityBakingSteps"
+            tools:context=".recipe_details.baking_steps.ActivityBakingSteps"
             tools:listitem="@layout/item_baking_steps_list_content" />
     </android.support.constraint.ConstraintLayout>
 </layout>

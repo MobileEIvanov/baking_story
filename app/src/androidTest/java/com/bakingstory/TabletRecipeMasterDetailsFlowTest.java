@@ -5,7 +5,7 @@ import android.support.test.espresso.IdlingResource;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.bakingstory.RecipeCollection.ActivityRecipesList;
+import com.bakingstory.recipes_collection.ActivityRecipesList;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,16 +20,15 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 
 /**
  * Created by emil.ivanov on 5/4/18.
  */
+@SuppressWarnings("CanBeFinal")
 @RunWith(AndroidJUnit4.class)
 public class TabletRecipeMasterDetailsFlowTest {
 
-    public static final String RECIPE_TITILE = "Brownies";
 
     private IdlingResource mIdlingResource;
 
@@ -67,8 +66,6 @@ public class TabletRecipeMasterDetailsFlowTest {
         onView(allOf((withId(R.id.rv_recipe_item_list)), withParent(withId(R.id.layout_recipe_collection))))
                 .perform(actionOnItemAtPosition(1, click()));
 
-        // Checks that the DetailsActivity opens with the correct  name displayed
-        onView(withId(R.id.tv_recipe_title)).check(matches(withText(RECIPE_TITILE)));
 
         // Check if bottom sheet ingredients is displayed
         onView(allOf((withId(R.id.tv_header_ingredients)), withParent(withId(R.id.layout_ingredients)))).perform(click());

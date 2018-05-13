@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.bakingstory.RecipeCollection.ActivityRecipesList">
+        tools:context="com.bakingstory.recipes_collection.ActivityRecipesList">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar"
@@ -34,7 +34,7 @@
                 android:id="@+id/rv_recipe_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"></android.support.v7.widget.RecyclerView>
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
         </FrameLayout>
 
 

@@ -2,16 +2,12 @@ package com.bakingstory;
 
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.IdlingResource;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.TextView;
 
-import com.bakingstory.RecipeCollection.ActivityRecipesList;
+import com.bakingstory.recipes_collection.ActivityRecipesList;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -22,30 +18,24 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
-import static android.support.test.espresso.action.ViewActions.swipeRight;
-import static android.support.test.espresso.action.ViewActions.swipeUp;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.is;
 
 /**
  * Created by emil.ivanov on 5/4/18.
  */
+@SuppressWarnings("CanBeFinal")
 @RunWith(AndroidJUnit4.class)
 public class PhoneRecipeMasterDetailsFlowTest {
 
-    public static final String RECIPE_TITILE = "Nutella Pie";
+    private static final String RECIPE_TITLE = "Nutella Pie";
 
     private IdlingResource mIdlingResource;
 
@@ -75,7 +65,7 @@ public class PhoneRecipeMasterDetailsFlowTest {
     /**
      * Clicks on a Recipe List and checks it opens up the Details Activity correct data.
      * <p>
-     *     https://android.googlesource.com/platform/frameworks/testing/+/61a929bd4642b9042bfb05b85340c1761ab90733/espresso/espresso-lib-tests/src/androidTest/java/com/google/android/apps/common/testing/ui/espresso/action/SwipeActionIntegrationTest.java
+     * https://android.googlesource.com/platform/frameworks/testing/+/61a929bd4642b9042bfb05b85340c1761ab90733/espresso/espresso-lib-tests/src/androidTest/java/com/google/android/apps/common/testing/ui/espresso/action/SwipeActionIntegrationTest.java
      * Test ViewPager - credits to https://stackoverflow.com/questions/29836405/testing-viewpager-with-espresso-how-perfom-action-to-a-button-of-an-item
      */
     @Test
@@ -87,7 +77,7 @@ public class PhoneRecipeMasterDetailsFlowTest {
 
         //Check if the selected item matches the toolbar text
         onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar))))
-                .check(matches(withText(RECIPE_TITILE)));
+                .check(matches(withText(RECIPE_TITLE)));
 
         onView(allOf(withId(R.id.rv_baking_steps), withParent(withId(R.id.layout_baking_steps_collection))))
                 .perform(actionOnItemAtPosition(0, click()));
@@ -97,8 +87,6 @@ public class PhoneRecipeMasterDetailsFlowTest {
         onView(withId(R.id.vp_baking_steps)).perform(swipeLeft());
 
 
-
-
 //         Check ingredients are properly displayed
         onView(withId(R.id.layout_ingredients)).check(matches(isDisplayed()));
 //
@@ -106,7 +94,6 @@ public class PhoneRecipeMasterDetailsFlowTest {
                 .perform(click());
 
         onView(withId(R.id.pageIndicatorView)).check(matches(isDisplayed()));
-
 
 
         onView(withId(R.id.rv_ingredients_list)).check(matches(isDisplayed()));

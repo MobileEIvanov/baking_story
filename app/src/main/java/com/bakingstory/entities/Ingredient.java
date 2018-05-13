@@ -13,8 +13,8 @@ import android.os.Parcelable;
  * "ingredient":"Bittersweet chocolate (60-70% cacao)"
  */
 
+@SuppressWarnings("ALL")
 public class Ingredient implements Parcelable, MeasurementTypes {
-    public static final String INGREDIENT_DATA = "ingredient_data";
 
     private long id;
     private double quantity;
@@ -41,9 +41,11 @@ public class Ingredient implements Parcelable, MeasurementTypes {
         }
     };
 
+    @SuppressWarnings("unused")
     public long getId() {
         return id;
     }
+
 
     public void setId(long id) {
         this.id = id;

@@ -1,9 +1,7 @@
 package com.bakingstory.utils;
 
 
-import android.support.annotation.Nullable;
 import android.support.test.espresso.IdlingResource;
-import android.support.test.espresso.idling.CountingIdlingResource;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -12,10 +10,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * Credits to: https://github.com/googlesamples/android-testing
  */
+@SuppressWarnings("CanBeFinal")
 public class HelperIdlingResource implements IdlingResource {
-
-    @Nullable
-    private volatile ResourceCallback mCallback;
 
     // Idleness is controlled with this boolean.
     private AtomicBoolean mIsIdleNow = new AtomicBoolean(true);
@@ -32,17 +28,7 @@ public class HelperIdlingResource implements IdlingResource {
 
     @Override
     public void registerIdleTransitionCallback(ResourceCallback callback) {
-        mCallback = callback;
     }
 
-    /**
-     * Sets the new idle state, if isIdleNow is true, it pings the {@link ResourceCallback}.
-     * @param isIdleNow false if there are pending operations, true if idle.
-     */
-    public void setIdleState(boolean isIdleNow) {
-        mIsIdleNow.set(isIdleNow);
-        if (isIdleNow && mCallback != null) {
-            mCallback.onTransitionToIdle();
-        }
-    }
+
 }
