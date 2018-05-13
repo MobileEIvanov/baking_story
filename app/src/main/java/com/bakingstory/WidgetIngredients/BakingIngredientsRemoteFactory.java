@@ -45,25 +45,12 @@ public class BakingIngredientsRemoteFactory implements RemoteViewsService.Remote
 
     private List<Ingredient> loadRecipeIngredients() {
         List<Ingredient> ingredients = new ArrayList<>();
-        appWidgetId = HomeWidgetConfigureActivity.loadLastWidgetIdPref(mContext);
+        appWidgetId = PreferensesManager.loadLastWidgetIdPref(mContext);
         if (appWidgetId != -1) {
-            mRecipeTitle = HomeWidgetConfigureActivity.loadTitlePref(mContext, appWidgetId);
-
-            ArrayList<Recipe> recipes = null;
-
-            try {
-                recipes = (ArrayList<Recipe>) HelperJsonDataParser.getAllRecepies(mContext);
-            } catch (IOException e) {
-                e.printStackTrace();
-
-            }
+            mRecipeTitle = PreferensesManager.loadTitlePref(mContext, appWidgetId);
+            ingredients = PreferensesManager.getSelectedIngredientsSteps(mContext);
 
 
-            for (Recipe recipe : recipes) {
-                if (recipe.getName().equals(mRecipeTitle)) {
-                    ingredients = recipe.getIngredients();
-                }
-            }
         }
         return ingredients;
     }
@@ -76,7 +63,7 @@ public class BakingIngredientsRemoteFactory implements RemoteViewsService.Remote
     @Override
     public int getCount() {
 
-        return mDataIngredients.size();
+        return mDataIngredients == null ? 0 : mDataIngredients.size();
     }
 
     @Override

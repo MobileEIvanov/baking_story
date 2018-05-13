@@ -32,7 +32,13 @@
 
             <include
                 android:id="@+id/layout_recipe_collection"
-                layout="@layout/layout_recipe_collection"/>
+                layout="@layout/layout_recipe_collection"
+                android:visibility="invisible" />
+
+            <include
+                android:id="@+id/layout_empty_view"
+                layout="@layout/layout_empty_view"
+                android:visibility="invisible" />
         </FrameLayout>
 
 

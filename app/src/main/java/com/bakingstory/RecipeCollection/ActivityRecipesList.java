@@ -8,6 +8,7 @@ import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.bakingstory.RecipeDetails.BakingSteps.ActivityBakingStepsList;
 import com.bakingstory.R;
@@ -38,21 +39,37 @@ public class ActivityRecipesList extends AppCompatActivity implements ContractRe
 
     ActivityRecipesListBinding mBinding;
     public static CountingIdlingResource mIdlingResources;
+    PresenterRecipes mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_recipes_list);
-
-        setSupportActionBar(mBinding.toolbar);
         mBinding.toolbar.setTitle(R.string.title_baking_story_recipes);
+        setSupportActionBar(mBinding.toolbar);
 
-        PresenterRecipes presenterRecipes = new PresenterRecipes(this, this);
+
+        mPresenter = new PresenterRecipes(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestRecipes();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mPresenter.onStop();
+    }
+
+    private void requestRecipes() {
         if (UtilsNetworkConnection.checkInternetConnection(this)) {
-            presenterRecipes.requestRecipes(mIdlingResources);
+            mPresenter.requestRecipes(mIdlingResources);
         } else {
-            Snackbar.make(mBinding.getRoot(), R.string.error_connection_message, Snackbar.LENGTH_LONG).show();
+            showErrorView();
         }
 
     }
@@ -61,6 +78,8 @@ public class ActivityRecipesList extends AppCompatActivity implements ContractRe
 
         mBinding.layoutRecipeCollection.rvRecipeItemList
                 .setAdapter(new AdapterRecipes(this, recipeList, this));
+        mBinding.layoutEmptyView.getRoot().setVisibility(View.INVISIBLE);
+        mBinding.layoutRecipeCollection.getRoot().setVisibility(View.VISIBLE);
     }
 
 
@@ -77,8 +96,13 @@ public class ActivityRecipesList extends AppCompatActivity implements ContractRe
 
     @Override
     public void showErrorView() {
-        Snackbar.make(mBinding.getRoot(), R.string.error_message_no_list, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+
+        mBinding.layoutEmptyView.getRoot().setVisibility(View.VISIBLE);
+        Snackbar snackbar = Snackbar.make(mBinding.getRoot(), R.string.error_message_no_list, Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction(R.string.btn_retry, v -> {
+            requestRecipes();
+            snackbar.dismiss();
+        }).show();
     }
 
 

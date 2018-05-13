@@ -22,19 +22,21 @@ public class HomeWidget extends AppWidgetProvider {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.home_widget);
-        views.setTextViewText(R.id.tv_header_ingredients, HomeWidgetConfigureActivity.loadTitlePref(context, appWidgetId) + " " + context.getString(R.string.label_widget_header));
+        views.setTextViewText(R.id.tv_header_ingredients, PreferensesManager.loadTitlePref(context, appWidgetId) + " " + context.getString(R.string.label_widget_header));
 
         Intent intent = new Intent(context, IngredientService.class);
 
-
-
+        views.setEmptyView(R.id.lv_widget_ingredients, R.id.layout_widget_empty_view);
         views.setRemoteAdapter(R.id.lv_widget_ingredients, intent);
+
 
         Intent appIntent = new Intent(context, ActivityRecipesList.class);
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.lv_widget_ingredients, appPendingIntent);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
+
+
     }
 
     @Override
@@ -49,7 +51,7 @@ public class HomeWidget extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         // When the user deletes the widget, delete the preference associated with it.
         for (int appWidgetId : appWidgetIds) {
-            HomeWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
+            PreferensesManager.deleteTitlePref(context, appWidgetId);
         }
     }
 

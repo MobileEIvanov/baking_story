@@ -16,6 +16,7 @@ public interface ContractRecipes {
 
     interface Presenter {
         void requestRecipes(CountingIdlingResource idlingResource);
+        void onStop();
     }
 
     interface View {

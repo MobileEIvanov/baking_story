@@ -15,4 +15,6 @@
     <string name="error_connection_message">Please check your internet connection and try again.</string>
     <string name="title_baking_story_recipes">Baking Story - Recipes</string>
     <string name="error_message_no_list">Oops.. there are no items available.</string>
+    <string name="error_no_content_available">Sorry… no content is available.\nPlease try again later.</string>
+    <string name="btn_retry">Retry</string>
 </resources>

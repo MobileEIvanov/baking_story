@@ -14,6 +14,7 @@ import java.util.List;
 
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -26,14 +27,13 @@ import static com.bakingstory.RecipeCollection.ContractRecipes.*;
 public class PresenterRecipes implements Presenter {
 
     private View mView;
-    private Context mContext;
 
-    public PresenterRecipes(Context context, View mView) {
-        this.mView = mView;
-        this.mContext = context;
+    public PresenterRecipes(View view) {
+        this.mView = view;
     }
 
-    CountingIdlingResource mIdlingResource;
+    private CountingIdlingResource mIdlingResource;
+    private Disposable mDisposable;
 
     @Override
     public void requestRecipes(CountingIdlingResource idlingResource) {
@@ -45,12 +45,19 @@ public class PresenterRecipes implements Presenter {
         }
 
         RestDataSource restDataSource = new RestDataSource();
-        restDataSource.requestRecipeList()
+        mDisposable = restDataSource.requestRecipeList()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mConsumerSuccess, mConsumerError);
 
 
+    }
+
+    @Override
+    public void onStop() {
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+        }
     }
 
     private final Consumer<List<Recipe>> mConsumerSuccess = new Consumer<List<Recipe>>() {
