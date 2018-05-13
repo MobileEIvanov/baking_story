@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A fragment representing a single RecepieItem detail screen.
+ * A fragment representing a single Recipe Item detail screen.
  * This fragment is either contained in a {@link ActivityRecipesList}
  * in two-pane mode (on tablets) or a {@link ActivityBakingStepDetails}
  * on handsets.
