@@ -5,7 +5,7 @@ and step-by-step guide to create awesome sweets. The app support both Phone and 
 to every place you want and start creating.
 
 ## Phone support
-<img src="screens/phone_bakin_step_port.png" width="50%" height="50%"><img src="screens/phone_baking_step_port.png" width="50%" height="50%"><img src="screens/phone_igredients.png" width="50%" height="50%">
+<img src="screens/phone_splash.png" width="50%" height="50%"><img src="screens/widget_config.png" width="50%" height="50%"><img src="screens/phone_bakin_step_port.png" width="50%" height="50%"><img src="screens/phone_baking_step_port.png" width="50%" height="50%"><img src="screens/phone_igredients.png" width="50%" height="50%">
 
 ## Supports fullscreen videos
 <img src="screens/phone_baking_step_land.png" width="50%" height="50%">
@@ -14,7 +14,7 @@ to every place you want and start creating.
 <img src="screens/tablet_port_video.png" width="50%" height="50%"><img src="screens/tablet_ingredients_port.png" width="50%" height="50%"><img src="screens/tablet_recipes_land.png" width="50%" height="50%"><img src="screens/tablet_baking_step_land.png" width="50%" height="50%">
 
 ## Widget Ingredients
-<img src="screens/widget.png" width="50%" height="50%">
+<img src="screens/widget_icon.png" width="50%" height="50%"><img src="screens/widget_config.png" width="50%" height="50%"><img src="screens/widget_content.png" width="50%" height="50%">
 
 ## Project Architecture
 
