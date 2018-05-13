@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.bakingstory.recipes_collection.ActivityRecipesList;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +21,7 @@ import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -36,7 +38,7 @@ import static org.hamcrest.Matchers.allOf;
 public class PhoneRecipeMasterDetailsFlowTest {
 
     private static final String RECIPE_TITLE = "Nutella Pie";
-
+    private static final String STEP_DESCRIPTION = "Step 1: Starting prep";
     private IdlingResource mIdlingResource;
 
     @Before
@@ -58,7 +60,11 @@ public class PhoneRecipeMasterDetailsFlowTest {
 
     @Test
     public void check_isRecipeList_Displayed() {
-
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.layout_recipe_collection)).check(matches(isDisplayed()));
     }
 
@@ -83,13 +89,16 @@ public class PhoneRecipeMasterDetailsFlowTest {
                 .perform(actionOnItemAtPosition(0, click()));
 
 
+        // Check View pager navigation
         onView(withId(R.id.vp_baking_steps)).check(matches(isDisplayed()));
         onView(withId(R.id.vp_baking_steps)).perform(swipeLeft());
 
+        onView(CoreMatchers.allOf(withId(R.id.tv_step_short_description), isDescendantOfA(withId(R.id.vp_baking_steps)),isDisplayed()))
+                .check(matches(withText(STEP_DESCRIPTION)));
 
-//         Check ingredients are properly displayed
+        // Check ingredients are properly displayed
         onView(withId(R.id.layout_ingredients)).check(matches(isDisplayed()));
-//
+
         onView(allOf(withId(R.id.btn_toggle_ingredients), withParent(withId(R.id.layout_ingredients))))
                 .perform(click());
 
