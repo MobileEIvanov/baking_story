@@ -121,7 +121,7 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
         String toolbarTitle;
 
         if (mTwoPane) {
-            toolbarTitle = mRecipeData.getName() + " " + String.format(getString(R.string.text_servings), mRecipeData.getServings());
+            toolbarTitle = mRecipeData.getName() + " - " + String.format(getString(R.string.text_servings), mRecipeData.getServings());
         } else {
             toolbarTitle = mRecipeData.getName();
         }

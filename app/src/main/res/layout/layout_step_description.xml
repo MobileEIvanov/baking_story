@@ -45,9 +45,9 @@
                     app:resize_mode="fixed_width" />
 
                 <include
-                    android:visibility="invisible"
                     android:id="@+id/layout_empty_view"
                     layout="@layout/layout_empty_view"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

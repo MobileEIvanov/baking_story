@@ -20,6 +20,7 @@ import android.view.Window;
 import com.bakingstory.R;
 import com.bakingstory.databinding.LayoutFullscreenVideoDialogBinding;
 import com.bakingstory.entities.BakingStep;
+import com.bakingstory.utils.UtilsNetworkConnection;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
@@ -87,10 +88,6 @@ public class FullscreenVideoDialog
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.layout_fullscreen_video_dialog, container, false);
 
-        if (mBakingStep != null) {
-            hideSystemUi();
-            initializePlayer(mBakingStep.getVideoURL());
-        }
 
         populateCurrentBakingStep(mBakingStep);
         return mBinding.getRoot();
@@ -112,7 +109,6 @@ public class FullscreenVideoDialog
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putLong(SEEKER_POSITION, mExoPlayer.getCurrentPosition());
         outState.putParcelable(BakingStep.BAKING_DATA, mBakingStep);
         super.onSaveInstanceState(outState);
     }
@@ -136,7 +132,16 @@ public class FullscreenVideoDialog
     @Override
     public void onResume() {
         super.onResume();
-
+        if (mBakingStep != null) {
+            hideSystemUi();
+            if (UtilsNetworkConnection.checkInternetConnection(getActivity())) {
+                mBinding.layoutEmptyView.emptyViewRoot.setVisibility(View.INVISIBLE);
+                initializePlayer(mBakingStep.getVideoURL());
+            } else {
+                mBinding.layoutEmptyView.getRoot().setVisibility(View.VISIBLE);
+                releasePlayer();
+            }
+        }
     }
 
     @Override

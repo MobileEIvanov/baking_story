@@ -50,7 +50,6 @@ public class ActivityBakingStepDetails extends AppCompatActivity
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_baking_step_details);
 
-        initToolbar();
 
         if (savedInstanceState == null) {
             if (getIntent().hasExtra(Recipe.RECIPE_DATA)) {
@@ -66,10 +65,12 @@ public class ActivityBakingStepDetails extends AppCompatActivity
             mBakingStep = mRecipeData.getSteps().get(mCurrentSelectedStep);
 
         }
+        initToolbar();
         displayContentBasedOnOrientation();
     }
 
     private void initToolbar() {
+        mBinding.detailToolbar.setTitle(mRecipeData.getName());
         setSupportActionBar(mBinding.detailToolbar);
         // Show the Up button in the action bar.
         if (getSupportActionBar() != null) {

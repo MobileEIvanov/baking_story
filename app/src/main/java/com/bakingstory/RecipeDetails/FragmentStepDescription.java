@@ -16,9 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bakingstory.ApplicationBakingStory;
 import com.bakingstory.R;
 import com.bakingstory.databinding.LayoutStepDescriptionBinding;
 import com.bakingstory.entities.BakingStep;
+import com.bakingstory.utils.UtilsNetworkConnection;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
@@ -107,6 +109,9 @@ public class FragmentStepDescription extends Fragment {
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.layout_step_description, container, false);
         populateCurrentBakingStep(mBakingStep);
+        if (!UtilsNetworkConnection.checkInternetConnection(ApplicationBakingStory.getInstance().getApplicationContext())) {
+            mBinding.layoutEmptyView.emptyViewRoot.setVisibility(View.VISIBLE);
+        }
         return mBinding.getRoot();
     }
 
@@ -189,8 +194,12 @@ public class FragmentStepDescription extends Fragment {
         if (!isVisibleToUser) {
             releasePlayer();
         } else if (isVisibleToUser) {
-            if (mBakingStep != null) {
-                initializePlayer(mBakingStep.getVideoURL());
+            if (UtilsNetworkConnection.checkInternetConnection(ApplicationBakingStory.getInstance().getApplicationContext())) {
+                if (mBakingStep != null) {
+                    initializePlayer(mBakingStep.getVideoURL());
+                }
+            } else {
+                releasePlayer();
             }
         }
 
