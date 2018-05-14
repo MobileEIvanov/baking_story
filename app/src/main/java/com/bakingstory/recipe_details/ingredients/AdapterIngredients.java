@@ -3,6 +3,7 @@ package com.bakingstory.recipe_details.ingredients;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,15 +57,13 @@ public class AdapterIngredients extends RecyclerView.Adapter<AdapterIngredients.
         ViewHolder(View view) {
             super(view);
             mBinding = DataBindingUtil.bind(view);
-
-
         }
 
         void bindData(Ingredient ingredient) {
-            if (ingredient.getIngredient() != null) {
+            if (!TextUtils.isEmpty(ingredient.getIngredient())) {
                 mBinding.tvIngredient.setText(ingredient.getIngredient());
             }
-            if (ingredient.getMeasurementAsPlainText() != null) {
+            if (!TextUtils.isEmpty(ingredient.getMeasurementAsPlainText())) {
                 mBinding.tvMeasurement.setText(ingredient.getMeasurementAsPlainText());
             }
             if (ingredient.getQuantity() > 0) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,12 +116,12 @@ public class AdapterBakingSteps extends RecyclerView.Adapter<AdapterBakingSteps.
 
             itemView.setSelected(bakingStep.isSelected());
             mBinding.tvStepShortDescription.setSelected(bakingStep.isSelected());
-            if (bakingStep.getShortDescription() != null) {
+            if (!TextUtils.isEmpty(bakingStep.getShortDescription())) {
                 mBinding.tvStepShortDescription.setText(bakingStep.getShortDescription());
             }
 
 
-            if (bakingStep.getThumbnailURL() != null && !bakingStep.getThumbnailURL().isEmpty()) {
+            if (!TextUtils.isEmpty(bakingStep.getThumbnailURL())) {
                 UtilsImageLoader.loadNetworkImage(mContext, mBinding.ivThumbImage, bakingStep.getThumbnailURL());
             }
         }

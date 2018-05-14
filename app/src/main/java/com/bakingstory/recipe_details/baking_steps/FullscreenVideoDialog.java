@@ -45,13 +45,19 @@ public class FullscreenVideoDialog
         extends DialogFragment {
 
     public static final String TAG = "fullscreen";
+    private static final String PLAY_WHEN_READY = "auto_play";
+    private static final String SEEK_POSITION = "seek_position";
+    private static final String CURRENT_WINDOW = "current_window";
+
 
     private SimpleExoPlayer mExoPlayer;
 
     private IDialogInteractions mListenerDialogActions = null;
     private LayoutFullscreenVideoDialogBinding mBinding;
     private BakingStep mBakingStep;
-
+    private long mSeekPosition = 0;
+    private boolean mPlayWhenReady = false;
+    private int mCurrentWindow = 0;
 
     public static FullscreenVideoDialog newInstance(BakingStep bakingStep) {
         Bundle args = new Bundle();
@@ -67,6 +73,9 @@ public class FullscreenVideoDialog
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             mBakingStep = savedInstanceState.getParcelable(BakingStep.BAKING_DATA);
+            mCurrentWindow = savedInstanceState.getInt(CURRENT_WINDOW);
+            mPlayWhenReady = savedInstanceState.getBoolean(PLAY_WHEN_READY);
+            mSeekPosition = savedInstanceState.getLong(SEEK_POSITION);
         } else if (getArguments() != null) {
             mBakingStep = getArguments().getParcelable(BakingStep.BAKING_DATA);
             if (mBakingStep == null) {
@@ -74,7 +83,6 @@ public class FullscreenVideoDialog
             }
         }
         setRetainInstance(true);
-
     }
 
 
@@ -184,14 +192,27 @@ public class FullscreenVideoDialog
                 .createMediaSource(Uri.parse(mediaUri));
 
 
-        mExoPlayer.prepare(mediaSource, true, true);
-        mExoPlayer.addListener(componentListener);
+        mExoPlayer.prepare(mediaSource, false, true);
 
-        mExoPlayer.setPlayWhenReady(false);
+        mExoPlayer.setPlayWhenReady(mPlayWhenReady);
+        mExoPlayer.seekTo(mCurrentWindow, mSeekPosition);
+
+        mExoPlayer.addListener(componentListener);
 
         mBinding.videoPlayerView.setPlayer(mExoPlayer);
     }
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        releasePlayer();
+        outState.putParcelable(BakingStep.BAKING_DATA, mBakingStep);
+        outState.putLong(SEEK_POSITION, mSeekPosition);
+        outState.putBoolean(PLAY_WHEN_READY, mPlayWhenReady);
+        outState.putInt(CURRENT_WINDOW, mCurrentWindow);
+        super.onSaveInstanceState(outState);
+    }
 
     private void populateCurrentBakingStep(BakingStep bakingStep) {
 
@@ -220,7 +241,9 @@ public class FullscreenVideoDialog
      */
     private void releasePlayer() {
         if (mExoPlayer != null) {
-
+            mSeekPosition = mExoPlayer.getCurrentPosition();
+            mCurrentWindow = mExoPlayer.getCurrentWindowIndex();
+            mPlayWhenReady = mExoPlayer.getPlayWhenReady();
             mExoPlayer.release();
             mExoPlayer = null;
         }

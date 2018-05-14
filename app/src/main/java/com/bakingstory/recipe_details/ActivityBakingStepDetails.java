@@ -8,11 +8,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.bakingstory.R;
+import com.bakingstory.entities.PlayerState;
 import com.bakingstory.recipes_collection.ActivityRecipesList;
 import com.bakingstory.recipe_details.baking_steps.FullscreenVideoDialog;
 import com.bakingstory.databinding.ActivityBakingStepDetailsBinding;
 import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.Recipe;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * An activity representing a single RecipeItem detail screen. This
@@ -44,6 +49,25 @@ public class ActivityBakingStepDetails extends AppCompatActivity
         displayContentBasedOnOrientation();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(PlayerState playerState) {
+        /* Do something */
+        // TODO: 5/14/18 Show the full screen dialog when the orientatio is changed. And the previous player was release
+        // TODO: 5/14/18 Check if the device is tablet or phone
+        // TODO: 5/14/18 Repeat the steps from dialog to Step descriptions
+
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,4 +190,6 @@ public class ActivityBakingStepDetails extends AppCompatActivity
             onBackPressed();
         }
     }
+
+
 }

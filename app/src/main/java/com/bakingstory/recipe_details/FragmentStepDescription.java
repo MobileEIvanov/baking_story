@@ -17,6 +17,7 @@ import com.bakingstory.ApplicationBakingStory;
 import com.bakingstory.R;
 import com.bakingstory.databinding.LayoutStepDescriptionBinding;
 import com.bakingstory.entities.BakingStep;
+import com.bakingstory.entities.PlayerState;
 import com.bakingstory.utils.UtilsNetworkConnection;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -32,6 +33,8 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -39,6 +42,14 @@ public class FragmentStepDescription extends Fragment {
 
 
     private static final String TAG = "StepDescription";
+
+    private long mSeekPosition = 0;
+    private boolean mPlayWhenReady = false;
+    private int mCurrentWindow = 0;
+
+    private static final String PLAY_WHEN_READY = "auto_play";
+    private static final String SEEK_POSITION = "seek_position";
+    private static final String CURRENT_WINDOW = "current_window";
 
 
     public FragmentStepDescription() {
@@ -65,17 +76,15 @@ public class FragmentStepDescription extends Fragment {
         setRetainInstance(true);
         if (savedInstanceState != null) {
             mBakingStep = savedInstanceState.getParcelable(BakingStep.BAKING_DATA);
+            mCurrentWindow = savedInstanceState.getInt(CURRENT_WINDOW);
+            mPlayWhenReady = savedInstanceState.getBoolean(PLAY_WHEN_READY);
+            mSeekPosition = savedInstanceState.getLong(SEEK_POSITION);
+
         } else if (getArguments() != null) {
             mBakingStep = getArguments().getParcelable(BakingStep.BAKING_DATA);
         }
     }
 
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelable(BakingStep.BAKING_DATA, mBakingStep);
-        super.onSaveInstanceState(outState);
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -123,6 +132,7 @@ public class FragmentStepDescription extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
         if (Util.SDK_INT > 23) {
             if (mBakingStep != null && getUserVisibleHint()) {
                 initializePlayer(mBakingStep.getVideoURL());
@@ -154,6 +164,18 @@ public class FragmentStepDescription extends Fragment {
         if (Util.SDK_INT > 23) {
             releasePlayer();
         }
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        releasePlayer();
+        outState.putParcelable(BakingStep.BAKING_DATA, mBakingStep);
+        outState.putLong(SEEK_POSITION, mSeekPosition);
+        outState.putBoolean(PLAY_WHEN_READY, mPlayWhenReady);
+        outState.putInt(CURRENT_WINDOW, mCurrentWindow);
+        super.onSaveInstanceState(outState);
     }
 
 
@@ -217,10 +239,13 @@ public class FragmentStepDescription extends Fragment {
         DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(getActivity(), null);
         mExoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
 
-        mExoPlayer.prepare(mediaSource, true, true);
-        mExoPlayer.addListener(componentListener);
-        mExoPlayer.setPlayWhenReady(false);
 
+        mExoPlayer.prepare(mediaSource, false, true);
+
+        mExoPlayer.setPlayWhenReady(mPlayWhenReady);
+        mExoPlayer.seekTo(mCurrentWindow, mSeekPosition);
+
+        mExoPlayer.addListener(componentListener);
 
         mBinding.videoPlayerView.setPlayer(mExoPlayer);
     }
@@ -231,10 +256,22 @@ public class FragmentStepDescription extends Fragment {
      */
     private void releasePlayer() {
         if (mExoPlayer != null) {
+            mSeekPosition = mExoPlayer.getCurrentPosition();
+            mCurrentWindow = mExoPlayer.getCurrentWindowIndex();
+            mPlayWhenReady = mExoPlayer.getPlayWhenReady();
+            EventBus.getDefault().post(new PlayerState(mSeekPosition, mCurrentWindow, mPlayWhenReady));
             mExoPlayer.release();
             mExoPlayer = null;
         }
     }
+
+
+    public void updatePlayerState(long seekPosition, boolean playWhenReady, int window) {
+        mSeekPosition = seekPosition;
+        mPlayWhenReady = playWhenReady;
+        mCurrentWindow = window;
+    }
+
 
     private class ComponentListener extends Player.DefaultEventListener {
 

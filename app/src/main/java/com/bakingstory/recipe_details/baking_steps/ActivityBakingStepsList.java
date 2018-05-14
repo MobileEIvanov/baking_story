@@ -62,14 +62,7 @@ public class ActivityBakingStepsList extends AppCompatActivity implements Adapte
             return;
         }
 
-        if (findViewById(R.id.fl_baking_steps_item_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
-
+        mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
         setupRecyclerView(mRecipeData.getSteps());
         initToolbar();
