@@ -4,6 +4,7 @@ package com.bakingstory.recipe_details.baking_steps;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,6 +22,7 @@ import android.view.Window;
 import com.bakingstory.R;
 import com.bakingstory.databinding.LayoutFullscreenVideoDialogBinding;
 import com.bakingstory.entities.BakingStep;
+import com.bakingstory.entities.PlayerState;
 import com.bakingstory.utils.UtilsNetworkConnection;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -59,9 +61,10 @@ public class FullscreenVideoDialog
     private boolean mPlayWhenReady = false;
     private int mCurrentWindow = 0;
 
-    public static FullscreenVideoDialog newInstance(BakingStep bakingStep) {
+    public static FullscreenVideoDialog newInstance(BakingStep bakingStep, PlayerState playerState) {
         Bundle args = new Bundle();
         args.putParcelable(BakingStep.BAKING_DATA, bakingStep);
+        args.putParcelable(PlayerState.DATA, playerState);
         FullscreenVideoDialog dialog = new FullscreenVideoDialog();
         dialog.setArguments(args);
         return dialog;
@@ -78,6 +81,10 @@ public class FullscreenVideoDialog
             mSeekPosition = savedInstanceState.getLong(SEEK_POSITION);
         } else if (getArguments() != null) {
             mBakingStep = getArguments().getParcelable(BakingStep.BAKING_DATA);
+            PlayerState playerState = getArguments().getParcelable(PlayerState.DATA);
+            mSeekPosition = playerState.getSeekPosition();
+            mCurrentWindow = playerState.getCurrentWindow();
+            mPlayWhenReady = playerState.isPlayWhenReady();
             if (mBakingStep == null) {
                 dismissAllowingStateLoss();
             }
@@ -159,7 +166,7 @@ public class FullscreenVideoDialog
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        mListenerDialogActions.onDialogDismiss();
+
         super.onDismiss(dialog);
     }
 
@@ -244,13 +251,19 @@ public class FullscreenVideoDialog
             mSeekPosition = mExoPlayer.getCurrentPosition();
             mCurrentWindow = mExoPlayer.getCurrentWindowIndex();
             mPlayWhenReady = mExoPlayer.getPlayWhenReady();
+            mListenerDialogActions.onDialogDismiss(new PlayerState(mSeekPosition, mCurrentWindow, mPlayWhenReady));
             mExoPlayer.release();
             mExoPlayer = null;
         }
     }
 
-    public void refreshData(BakingStep bakingStep) {
+    public void refreshData(BakingStep bakingStep, PlayerState playerState) {
         mBakingStep = bakingStep;
+        mSeekPosition = playerState.getSeekPosition();
+        mCurrentWindow = playerState.getCurrentWindow();
+        mPlayWhenReady = playerState.isPlayWhenReady();
+
+        initializePlayer(mBakingStep.getVideoURL());
     }
 
     private class ComponentListener extends Player.DefaultEventListener {
@@ -296,6 +309,7 @@ public class FullscreenVideoDialog
     }
 
     public interface IDialogInteractions {
-        void onDialogDismiss();
+        void onDialogDismiss(PlayerState playerState);
+
     }
 }

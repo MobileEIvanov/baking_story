@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bakingstory.R;
+import com.bakingstory.entities.PlayerState;
 import com.bakingstory.recipes_collection.ActivityRecipesList;
 import com.bakingstory.recipe_details.baking_steps.ViewPagerAdapterBakingSteps;
 import com.bakingstory.recipe_details.ingredients.AdapterIngredients;
@@ -38,6 +39,7 @@ public class FragmentRecipeDetails extends Fragment {
     private static final int ANIMATION_END_ANGLE = 180;
 
     private Recipe mRecipeData;
+    private PlayerState mPlayerState;
     private ContentRecipeDetailsBinding mBinding;
     private BottomSheetBehavior mBottomSheetBehavior;
     private int mCurrentSelection = 0;
@@ -81,14 +83,12 @@ public class FragmentRecipeDetails extends Fragment {
         if (savedInstanceState != null) {
             mRecipeData = savedInstanceState.getParcelable(Recipe.RECIPE_DATA);
             mCurrentSelection = savedInstanceState.getInt(BakingStep.BAKING_DATA);
+
         } else if (getArguments() != null && getArguments().containsKey(Recipe.RECIPE_DATA)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
+
             mRecipeData = getArguments().getParcelable(Recipe.RECIPE_DATA);
             mCurrentSelection = getArguments().getInt(BakingStep.BAKING_DATA);
         }
-
     }
 
 

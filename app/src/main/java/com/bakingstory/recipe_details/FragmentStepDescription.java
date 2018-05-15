@@ -1,6 +1,7 @@
 package com.bakingstory.recipe_details;
 
 
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.bakingstory.R;
 import com.bakingstory.databinding.LayoutStepDescriptionBinding;
 import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.PlayerState;
+import com.bakingstory.recipe_details.baking_steps.FullscreenVideoDialog;
 import com.bakingstory.utils.UtilsNetworkConnection;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -34,11 +36,13 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentStepDescription extends Fragment {
+public class FragmentStepDescription extends Fragment implements FullscreenVideoDialog.IDialogInteractions {
 
 
     private static final String TAG = "StepDescription";
@@ -250,6 +254,40 @@ public class FragmentStepDescription extends Fragment {
         mBinding.videoPlayerView.setPlayer(mExoPlayer);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(Configuration configuration) {
+        /* Do something */
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && getUserVisibleHint()) {
+            releasePlayer();
+            showFullScreenDialog(new PlayerState(mSeekPosition, mCurrentWindow, mPlayWhenReady));
+        } else if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT && getUserVisibleHint()) {
+            hideFullScreenDialog();
+        }
+    }
+
+    private void showFullScreenDialog(PlayerState playerState) {
+        FullscreenVideoDialog dialog = (FullscreenVideoDialog) getChildFragmentManager().findFragmentByTag(FullscreenVideoDialog.TAG);
+        if (dialog == null) {
+            dialog = FullscreenVideoDialog.newInstance(mBakingStep, playerState);
+        } else {
+            dialog.refreshData(mBakingStep, playerState);
+        }
+
+        dialog.setListenerDialogActions(this);
+        if (!dialog.isAdded() && !dialog.isVisible()) {
+            dialog.show(getChildFragmentManager(), FullscreenVideoDialog.TAG);
+        }
+
+    }
+
+
+    private void hideFullScreenDialog() {
+
+        FullscreenVideoDialog dialog = (FullscreenVideoDialog) getChildFragmentManager().findFragmentByTag(FullscreenVideoDialog.TAG);
+        if (dialog != null && dialog.isVisible()) {
+            dialog.dismissAllowingStateLoss();
+        }
+    }
 
     /**
      * Release ExoPlayer.
@@ -259,7 +297,6 @@ public class FragmentStepDescription extends Fragment {
             mSeekPosition = mExoPlayer.getCurrentPosition();
             mCurrentWindow = mExoPlayer.getCurrentWindowIndex();
             mPlayWhenReady = mExoPlayer.getPlayWhenReady();
-            EventBus.getDefault().post(new PlayerState(mSeekPosition, mCurrentWindow, mPlayWhenReady));
             mExoPlayer.release();
             mExoPlayer = null;
         }
@@ -270,6 +307,11 @@ public class FragmentStepDescription extends Fragment {
         mSeekPosition = seekPosition;
         mPlayWhenReady = playWhenReady;
         mCurrentWindow = window;
+    }
+
+    @Override
+    public void onDialogDismiss(PlayerState playerState) {
+        // TODO: 5/15/18 Update player state when dismissed.
     }
 
 

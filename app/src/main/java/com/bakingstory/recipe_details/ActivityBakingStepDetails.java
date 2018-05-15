@@ -16,8 +16,6 @@ import com.bakingstory.entities.BakingStep;
 import com.bakingstory.entities.Recipe;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * An activity representing a single RecipeItem detail screen. This
@@ -32,6 +30,7 @@ public class ActivityBakingStepDetails extends AppCompatActivity
     //    https://pngtree.com/pay?pay_ref=
     private ActivityBakingStepDetailsBinding mBinding;
     private int mCurrentSelectedStep = 0;
+    private PlayerState mPlayerState;
 
     public static Intent newInstance(Context context, Recipe recipeData, int bakingStepPosition) {
         Intent intent = new Intent(context, ActivityBakingStepDetails.class);
@@ -46,35 +45,15 @@ public class ActivityBakingStepDetails extends AppCompatActivity
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        displayContentBasedOnOrientation();
+        EventBus.getDefault().post(newConfig);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(PlayerState playerState) {
-        /* Do something */
-        // TODO: 5/14/18 Show the full screen dialog when the orientatio is changed. And the previous player was release
-        // TODO: 5/14/18 Check if the device is tablet or phone
-        // TODO: 5/14/18 Repeat the steps from dialog to Step descriptions
 
-    }
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_baking_step_details);
-
-
         if (savedInstanceState == null) {
             if (getIntent().hasExtra(Recipe.RECIPE_DATA)) {
                 mRecipeData = getIntent().getParcelableExtra(Recipe.RECIPE_DATA);
@@ -87,10 +66,11 @@ public class ActivityBakingStepDetails extends AppCompatActivity
             mRecipeData = savedInstanceState.getParcelable(Recipe.RECIPE_DATA);
             mCurrentSelectedStep = savedInstanceState.getInt(BakingStep.BAKING_DATA);
             mBakingStep = mRecipeData.getSteps().get(mCurrentSelectedStep);
-
         }
+
         initToolbar();
-        displayContentBasedOnOrientation();
+        showRecipeDetails();
+//        displayContentBasedOnOrientation();
     }
 
     private void initToolbar() {
@@ -105,7 +85,7 @@ public class ActivityBakingStepDetails extends AppCompatActivity
     private void displayContentBasedOnOrientation() {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             removeRecipeDetails();
-            showFullScreenDialog();
+            showFullScreenDialog(mPlayerState);
         } else {
             hideFullScreenDialog();
             showRecipeDetails();
@@ -142,12 +122,12 @@ public class ActivityBakingStepDetails extends AppCompatActivity
         }
     }
 
-    private void showFullScreenDialog() {
+    private void showFullScreenDialog(PlayerState playerState) {
         FullscreenVideoDialog dialog = (FullscreenVideoDialog) getSupportFragmentManager().findFragmentByTag(FullscreenVideoDialog.TAG);
         if (dialog == null) {
-            dialog = FullscreenVideoDialog.newInstance(mBakingStep);
+            dialog = FullscreenVideoDialog.newInstance(mBakingStep, playerState);
         } else {
-            dialog.refreshData(mBakingStep);
+            dialog.refreshData(mBakingStep, playerState);
         }
 
         dialog.setListenerDialogActions(this);
@@ -185,7 +165,7 @@ public class ActivityBakingStepDetails extends AppCompatActivity
     }
 
     @Override
-    public void onDialogDismiss() {
+    public void onDialogDismiss(PlayerState playerState) {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             onBackPressed();
         }
