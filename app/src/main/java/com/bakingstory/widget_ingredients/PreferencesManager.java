@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.bakingstory.R;
 import com.bakingstory.entities.Ingredient;
 import com.bakingstory.entities.Recipe;
+import com.bakingstory.utils.JSONSerializationUtils;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ class PreferencesManager {
         String jsonList = sharedPreferences.getString(PREF_SELECTED_INGREDIENTS, null);
 
         if (sharedPreferences.contains(PREF_SELECTED_INGREDIENTS)) {
-
+//            list = JSONSerializationUtils.deSerializeList(jsonList, Ingredient.class);
             Gson gson = new Gson();
             Ingredient[] ingredients = gson.fromJson(jsonList, Ingredient[].class);
             list = Arrays.asList(ingredients);
@@ -55,7 +56,7 @@ class PreferencesManager {
 
     }
 
-     static void saveSelectedRecipe(Context context, Recipe recipe) {
+    static void saveSelectedRecipe(Context context, Recipe recipe) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         Gson gson = new Gson();
         String json = gson.toJson(recipe);
@@ -64,22 +65,20 @@ class PreferencesManager {
     }
 
 
-    public static Recipe loadSelectedRecipe(Context context) {
+    public static Recipe loadSelectedRecipe(Context context) throws ClassNotFoundException {
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, 0);
-        String jsonList = sharedPreferences.getString(PREF_SELECTED_RECIPE, null);
+        String jsonRecipe = sharedPreferences.getString(PREF_SELECTED_RECIPE, null);
 
         if (sharedPreferences.contains(PREF_SELECTED_RECIPE)) {
 
-            Gson gson = new Gson();
-            return gson.fromJson(jsonList, Recipe.class);
+
+            return JSONSerializationUtils.deSerialize(jsonRecipe, Recipe.class);
         } else {
             return null;
         }
 
     }
-
-
 
 
     // Write the prefix to the SharedPreferences object for this widget
