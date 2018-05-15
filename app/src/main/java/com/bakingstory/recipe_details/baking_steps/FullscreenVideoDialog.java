@@ -82,9 +82,11 @@ public class FullscreenVideoDialog
         } else if (getArguments() != null) {
             mBakingStep = getArguments().getParcelable(BakingStep.BAKING_DATA);
             PlayerState playerState = getArguments().getParcelable(PlayerState.DATA);
-            mSeekPosition = playerState.getSeekPosition();
-            mCurrentWindow = playerState.getCurrentWindow();
-            mPlayWhenReady = playerState.isPlayWhenReady();
+            if (playerState != null) {
+                mSeekPosition = playerState.getSeekPosition();
+                mCurrentWindow = playerState.getCurrentWindow();
+                mPlayWhenReady = playerState.isPlayWhenReady();
+            }
             if (mBakingStep == null) {
                 dismissAllowingStateLoss();
             }

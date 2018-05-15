@@ -261,6 +261,7 @@ public class FragmentStepDescription extends Fragment implements FullscreenVideo
             releasePlayer();
             showFullScreenDialog(new PlayerState(mSeekPosition, mCurrentWindow, mPlayWhenReady));
         } else if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT && getUserVisibleHint()) {
+
             hideFullScreenDialog();
         }
     }
@@ -307,11 +308,13 @@ public class FragmentStepDescription extends Fragment implements FullscreenVideo
         mSeekPosition = seekPosition;
         mPlayWhenReady = playWhenReady;
         mCurrentWindow = window;
+        initializePlayer(mBakingStep.getVideoURL());
     }
 
     @Override
     public void onDialogDismiss(PlayerState playerState) {
         // TODO: 5/15/18 Update player state when dismissed.
+        updatePlayerState(playerState.getSeekPosition(), playerState.isPlayWhenReady(), playerState.getCurrentWindow());
     }
 
 
